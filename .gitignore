@@ -1,0 +1,35 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# --- Node.js ---
+node_modules/
+npm-debug.log*
+
+# --- Node-RED runtime files (flows.json, settings.js, package.json are kept) ---
+node-red/.config.*.json
+node-red/.flows.json.backup
+node-red/.flows_cred.json.backup
+node-red/flows_cred.json
+node-red/.sessions.json
+node-red/lib/
+
+# --- Runtime data ---
+data/wds.db
+data/wds.db-*
+data/cache/
+ml/results/closed_loop_kpis.json
+
+# --- Dataset archive (the unzipped WDSEventDB-main/ folder is kept) ---
+*.zip
+__MACOSX/
+.DS_Store
+
+# --- Editors / OS ---
+.vscode/
+.idea/
+Thumbs.db
+*.log

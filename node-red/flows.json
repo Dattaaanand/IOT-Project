@@ -1,0 +1,2768 @@
+[
+    {
+        "id": "wds_mqtt_broker",
+        "type": "mqtt-broker",
+        "name": "Local MQTT broker",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "wds-node-red",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "30",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    },
+    {
+        "id": "wds_ui_base",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-dark",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#1f8fb4",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#097479",
+                    "value": "#1f8fb4",
+                    "edited": true
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#1f8fb4",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#333333",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#5ac0e2",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#555555",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#333333",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#eeeeee",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#1f8fb4",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#333333",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "dark"
+            }
+        },
+        "site": {
+            "name": "Smart Water Distribution",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "ui_tab_live",
+        "type": "ui_tab",
+        "name": "Live Monitoring",
+        "icon": "fa-tint",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "ui_tab_analytics",
+        "type": "ui_tab",
+        "name": "Analytics & Alerts",
+        "icon": "fa-bell",
+        "order": 2,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "ui_tab_control",
+        "type": "ui_tab",
+        "name": "Control Panel",
+        "icon": "fa-sliders",
+        "order": 3,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "ui_tab_perf",
+        "type": "ui_tab",
+        "name": "Performance",
+        "icon": "fa-line-chart",
+        "order": 4,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "ui_grp_pressure",
+        "type": "ui_group",
+        "name": "Pressure",
+        "tab": "ui_tab_live",
+        "order": 1,
+        "disp": true,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "ui_grp_flow",
+        "type": "ui_group",
+        "name": "Flow",
+        "tab": "ui_tab_live",
+        "order": 2,
+        "disp": true,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "ui_grp_gauges",
+        "type": "ui_group",
+        "name": "Pressure Gauges",
+        "tab": "ui_tab_live",
+        "order": 3,
+        "disp": true,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "ui_grp_source",
+        "type": "ui_group",
+        "name": "IoT Node / Data Source",
+        "tab": "ui_tab_live",
+        "order": 4,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "ui_grp_pumps",
+        "type": "ui_group",
+        "name": "Pumps & Valve Positions",
+        "tab": "ui_tab_live",
+        "order": 5,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "ui_grp_state",
+        "type": "ui_group",
+        "name": "System State",
+        "tab": "ui_tab_analytics",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "ui_grp_probs",
+        "type": "ui_group",
+        "name": "ML Class Probabilities",
+        "tab": "ui_tab_analytics",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "ui_grp_timeline",
+        "type": "ui_group",
+        "name": "Prediction vs Ground Truth",
+        "tab": "ui_tab_analytics",
+        "order": 3,
+        "disp": true,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "ui_grp_alerts",
+        "type": "ui_group",
+        "name": "Alerts",
+        "tab": "ui_tab_analytics",
+        "order": 4,
+        "disp": true,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "ui_grp_actuators",
+        "type": "ui_group",
+        "name": "Actuator State",
+        "tab": "ui_tab_analytics",
+        "order": 5,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "ui_grp_actions",
+        "type": "ui_group",
+        "name": "Control Action Log",
+        "tab": "ui_tab_analytics",
+        "order": 6,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "ui_grp_auto",
+        "type": "ui_group",
+        "name": "Automation (Decision Engine)",
+        "tab": "ui_tab_control",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "ui_grp_manual",
+        "type": "ui_group",
+        "name": "Manual Override (Actuators)",
+        "tab": "ui_tab_control",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "ui_grp_scenario",
+        "type": "ui_group",
+        "name": "Scenario Injection (Simulator)",
+        "tab": "ui_tab_control",
+        "order": 3,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "ui_grp_dbadmin",
+        "type": "ui_group",
+        "name": "Database",
+        "tab": "ui_tab_control",
+        "order": 4,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "ui_grp_kpi",
+        "type": "ui_group",
+        "name": "Closed-loop Performance (live)",
+        "tab": "ui_tab_perf",
+        "order": 1,
+        "disp": true,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "ui_grp_models",
+        "type": "ui_group",
+        "name": "Offline Model Comparison",
+        "tab": "ui_tab_perf",
+        "order": 2,
+        "disp": true,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "ui_grp_dbstats",
+        "type": "ui_group",
+        "name": "Database Statistics",
+        "tab": "ui_tab_perf",
+        "order": 3,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "tab_ingest",
+        "type": "tab",
+        "label": "1-3 Ingest: MQTT → Node-RED → SQLite",
+        "disabled": false,
+        "info": "Arrows 1-3: telemetry from the IoT node is validated, stored in SQLite and sent to the dashboard."
+    },
+    {
+        "id": "tab_dash",
+        "type": "tab",
+        "label": "3 Dashboard: Live Monitoring",
+        "disabled": false,
+        "info": "Live charts and gauges of the sensor readings."
+    },
+    {
+        "id": "tab_analytics",
+        "type": "tab",
+        "label": "5-8 Analytics, Alerts & Actions",
+        "disabled": false,
+        "info": "Predictions, alerts, control commands and actuator acknowledgements from MQTT are stored and visualised."
+    },
+    {
+        "id": "tab_control",
+        "type": "tab",
+        "label": "Control Panel",
+        "disabled": false,
+        "info": "Dashboard controls: automation settings, manual actuator override, scenario injection."
+    },
+    {
+        "id": "tab_perf",
+        "type": "tab",
+        "label": "Performance Evaluation",
+        "disabled": false,
+        "info": "Closed-loop KPIs, offline ML model comparison, database statistics."
+    },
+    {
+        "id": "c0001",
+        "type": "comment",
+        "z": "tab_ingest",
+        "name": "① IoT node → MQTT broker → ② Node-RED (subscribe wds/sensors/telemetry)",
+        "info": "",
+        "x": 330,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "c0002",
+        "type": "comment",
+        "z": "tab_ingest",
+        "name": "③ store every reading in SQLite (telemetry table) and forward to the dashboard",
+        "info": "",
+        "x": 770,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "mo0003",
+        "type": "mqtt out",
+        "z": "tab_ingest",
+        "name": "alerts (edge rule)",
+        "topic": "wds/alerts",
+        "qos": "1",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "wds_mqtt_broker",
+        "x": 820,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "lo0004",
+        "type": "link out",
+        "z": "tab_ingest",
+        "name": "to dashboard",
+        "mode": "link",
+        "links": [
+            "li_dash"
+        ],
+        "x": 1015,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "d0005",
+        "type": "debug",
+        "z": "tab_ingest",
+        "name": "telemetry",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "counter",
+        "x": 1020,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "f0006",
+        "type": "function",
+        "z": "tab_ingest",
+        "name": "Store telemetry (SQLite)",
+        "func": "// INSERT the reading into SQLite (node:sqlite, see settings.js)\nconst db = global.get('db');\nlet stmt = context.get('stmt');\nif (!stmt) {\n    stmt = db.prepare(`INSERT INTO telemetry\n        (ts, received_ts, device_id, seq, scenario, segment, row_idx,\n         p1_out, p2_out, p3_in, p4_in, f1, f2, f3, f4,\n         vfd1, vfd2, vfd3, vfd4_1, vfd4_2, valve1, valve2, gt_class, quality)\n        VALUES (:ts, :received_ts, :device_id, :seq, :scenario, :segment, :row_idx,\n         :p1_out, :p2_out, :p3_in, :p4_in, :f1, :f2, :f3, :f4,\n         :vfd1, :vfd2, :vfd3, :vfd4_1, :vfd4_2, :valve1, :valve2, :gt_class, :quality)`);\n    context.set('stmt', stmt);\n}\nconst p = msg.payload;\nconst cols = ['ts', 'received_ts', 'device_id', 'seq', 'scenario', 'segment', 'p1_out', 'p2_out', 'p3_in',\n    'p4_in', 'f1', 'f2', 'f3', 'f4', 'vfd1', 'vfd2', 'vfd3', 'vfd4_1', 'vfd4_2', 'valve1', 'valve2',\n    'gt_class', 'quality'];\nconst row = { row_idx: p.row ?? null };\nfor (const c of cols) row[c] = p[c] ?? null;\ntry {\n    const r = stmt.run(row);\n    p.id = Number(r.lastInsertRowid);\n    node.status({ fill: 'green', shape: 'ring', text: `telemetry id ${p.id}` });\n} catch (e) {\n    node.status({ fill: 'red', shape: 'dot', text: e.message });\n    node.error(e.message, msg);\n    return null;\n}\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 810,
+        "y": 100,
+        "wires": [
+            [
+                "lo0004",
+                "d0005"
+            ]
+        ]
+    },
+    {
+        "id": "f0007",
+        "type": "function",
+        "z": "tab_ingest",
+        "name": "Validate & enrich",
+        "func": "// Flow processing at the edge: validate + enrich every reading\nconst p = msg.payload;\nconst cfg = global.get('wdsConfig').decision;\nconst [pmin, pmax] = cfg.pressure_valid_range;\nconst [fmin, fmax] = cfg.flow_valid_range;\n\nconst suspect = [];\nfor (const k of ['p1_out', 'p2_out', 'p3_in', 'p4_in']) {\n    if (typeof p[k] !== 'number' || p[k] < pmin || p[k] > pmax) suspect.push(k);\n}\nfor (const k of ['f1', 'f2', 'f3', 'f4']) {\n    if (typeof p[k] !== 'number' || p[k] < fmin || p[k] > fmax) suspect.push(k);\n}\np.received_ts = Date.now();\np.transit_ms = p.received_ts - p.ts;\np.quality = suspect.length ? 'SUSPECT' : 'OK';\np.suspect = suspect;\n\n// edge rule: immediate alert for physically impossible readings (rate-limited)\nlet alert = null;\nconst last = context.get('lastAlert') || 0;\nif (suspect.length && Date.now() - last > 30000) {\n    context.set('lastAlert', Date.now());\n    alert = { payload: { ts: Date.now(), source: 'node-red', level: 'WARNING', type: 'EDGE_RANGE_CHECK',\n        message: `Out-of-range reading on ${suspect.join(', ')} (edge rule in Node-RED)`, sensor: suspect[0] } };\n}\nnode.status({ fill: suspect.length ? 'yellow' : 'green', shape: 'dot',\n    text: `#${p.seq} ${p.scenario} ${p.quality} (${p.transit_ms} ms)` });\nreturn [msg, alert];\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 120,
+        "wires": [
+            [
+                "f0006"
+            ],
+            [
+                "mo0003"
+            ]
+        ]
+    },
+    {
+        "id": "mi0008",
+        "type": "mqtt in",
+        "z": "tab_ingest",
+        "name": "telemetry",
+        "topic": "wds/sensors/telemetry",
+        "qos": "1",
+        "datatype": "json",
+        "broker": "wds_mqtt_broker",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 120,
+        "wires": [
+            [
+                "f0007"
+            ]
+        ]
+    },
+    {
+        "id": "c0009",
+        "type": "comment",
+        "z": "tab_ingest",
+        "name": "IoT node status (online / scenario / replay position)",
+        "info": "",
+        "x": 290,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "lo0010",
+        "type": "link out",
+        "z": "tab_ingest",
+        "name": "sim status",
+        "mode": "link",
+        "links": [
+            "li_simstat"
+        ],
+        "x": 640,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "f0011",
+        "type": "function",
+        "z": "tab_ingest",
+        "name": "Track IoT node status",
+        "func": "const s = msg.payload;\nflow.set('simStatus', s);\nglobal.set('simStatus', s);\nnode.status({ fill: s.online ? 'green' : 'red', shape: 'dot',\n    text: s.online ? `${s.scenario} row ${s.row}/${s.end} @ ${s.rate_hz} Hz${s.paused ? ' (paused)' : ''}` : 'offline' });\nreturn { payload: s };\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 280,
+        "wires": [
+            [
+                "lo0010"
+            ]
+        ]
+    },
+    {
+        "id": "mi0012",
+        "type": "mqtt in",
+        "z": "tab_ingest",
+        "name": "simulator status",
+        "topic": "wds/sim/status",
+        "qos": "1",
+        "datatype": "json",
+        "broker": "wds_mqtt_broker",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 180,
+        "y": 280,
+        "wires": [
+            [
+                "f0011"
+            ]
+        ]
+    },
+    {
+        "id": "c0013",
+        "type": "comment",
+        "z": "tab_dash",
+        "name": "Live monitoring widgets (charts limited to the last 2 minutes)",
+        "info": "",
+        "x": 260,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "ch0014",
+        "type": "ui_chart",
+        "z": "tab_dash",
+        "name": "Pressure",
+        "group": "ui_grp_pressure",
+        "order": 1,
+        "width": 12,
+        "height": 5,
+        "label": "Pressure",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "waiting for data",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "2",
+        "removeOlderPoints": "600",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#ff7f0e",
+            "#2ca02c",
+            "#d62728",
+            "#9467bd",
+            "#8c564b",
+            "#e377c2",
+            "#7f7f7f",
+            "#bcbd22"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 900,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ch0015",
+        "type": "ui_chart",
+        "z": "tab_dash",
+        "name": "Water flow",
+        "group": "ui_grp_flow",
+        "order": 1,
+        "width": 12,
+        "height": 5,
+        "label": "Water flow",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "waiting for data",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "2",
+        "removeOlderPoints": "600",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#ff7f0e",
+            "#2ca02c",
+            "#d62728",
+            "#9467bd",
+            "#8c564b",
+            "#e377c2",
+            "#7f7f7f",
+            "#bcbd22"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 900,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "g0016",
+        "type": "ui_gauge",
+        "z": "tab_dash",
+        "name": "P1 out",
+        "group": "ui_grp_gauges",
+        "order": 1,
+        "width": 3,
+        "height": 3,
+        "gtype": "gage",
+        "title": "P1 out",
+        "label": "bar",
+        "format": "{{value | number:2}}",
+        "min": 0,
+        "max": 12,
+        "colors": [
+            "#ca3838",
+            "#00b500",
+            "#e6e600"
+        ],
+        "seg1": 3,
+        "seg2": 9,
+        "diff": false,
+        "className": "",
+        "x": 900,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "g0017",
+        "type": "ui_gauge",
+        "z": "tab_dash",
+        "name": "P2 out",
+        "group": "ui_grp_gauges",
+        "order": 2,
+        "width": 3,
+        "height": 3,
+        "gtype": "gage",
+        "title": "P2 out",
+        "label": "bar",
+        "format": "{{value | number:2}}",
+        "min": -2,
+        "max": 4,
+        "colors": [
+            "#ca3838",
+            "#00b500",
+            "#e6e600"
+        ],
+        "seg1": 0.8,
+        "seg2": 3,
+        "diff": false,
+        "className": "",
+        "x": 900,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "g0018",
+        "type": "ui_gauge",
+        "z": "tab_dash",
+        "name": "P3 in",
+        "group": "ui_grp_gauges",
+        "order": 3,
+        "width": 3,
+        "height": 3,
+        "gtype": "gage",
+        "title": "P3 in",
+        "label": "bar",
+        "format": "{{value | number:2}}",
+        "min": -2,
+        "max": 4,
+        "colors": [
+            "#ca3838",
+            "#00b500",
+            "#e6e600"
+        ],
+        "seg1": 0.4,
+        "seg2": 3,
+        "diff": false,
+        "className": "",
+        "x": 900,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "g0019",
+        "type": "ui_gauge",
+        "z": "tab_dash",
+        "name": "P4 in",
+        "group": "ui_grp_gauges",
+        "order": 4,
+        "width": 3,
+        "height": 3,
+        "gtype": "gage",
+        "title": "P4 in",
+        "label": "bar",
+        "format": "{{value | number:2}}",
+        "min": -2,
+        "max": 4,
+        "colors": [
+            "#ca3838",
+            "#00b500",
+            "#e6e600"
+        ],
+        "seg1": 0.4,
+        "seg2": 3,
+        "diff": false,
+        "className": "",
+        "x": 900,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "t0020",
+        "type": "ui_template",
+        "z": "tab_dash",
+        "group": "ui_grp_source",
+        "name": "Data source",
+        "order": 1,
+        "width": 6,
+        "height": 5,
+        "format": "<style>\n.wds-kv{width:100%;font-size:13px;border-collapse:collapse}\n.wds-kv td{padding:3px 6px;border-bottom:1px solid #444}\n.wds-kv td:first-child{color:#9ab;width:45%}\n.ok{color:#4caf50;font-weight:bold}.bad{color:#ff9800;font-weight:bold}\n</style>\n<table class=\"wds-kv\" ng-if=\"msg.payload\">\n<tr><td>Device</td><td>{{msg.payload.device_id}}</td></tr>\n<tr><td>Recording (scenario)</td><td>{{msg.payload.scenario}} &nbsp;(segment {{msg.payload.segment}}, row {{msg.payload.row}})</td></tr>\n<tr><td>Sequence no.</td><td>{{msg.payload.seq}}</td></tr>\n<tr><td>Sensor time</td><td>{{msg.payload.ts | date:'HH:mm:ss.sss'}}</td></tr>\n<tr><td>MQTT → Node-RED transit</td><td>{{msg.payload.transit_ms}} ms</td></tr>\n<tr><td>Data quality (edge check)</td><td ng-class=\"msg.payload.quality=='OK'?'ok':'bad'\">{{msg.payload.quality}} <span ng-if=\"msg.payload.suspect.length\">({{msg.payload.suspect.join(', ')}})</span></td></tr>\n<tr><td>Ground truth (dataset label)</td><td>{{msg.payload.gt_name}}</td></tr>\n<tr><td>Stored in SQLite as id</td><td>{{msg.payload.id}}</td></tr>\n</table>",
+        "storeOutMessages": true,
+        "fwdInMessages": false,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 900,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "t0021",
+        "type": "ui_template",
+        "z": "tab_dash",
+        "group": "ui_grp_pumps",
+        "name": "Pumps & valves",
+        "order": 1,
+        "width": 6,
+        "height": 5,
+        "format": "<style>\n.wds-bar{background:#222;border-radius:3px;height:14px;margin:2px 0 8px 0}\n.wds-bar div{height:14px;border-radius:3px;background:#1f8fb4}\n.wds-lbl{font-size:12px;display:flex;justify-content:space-between}\n</style>\n<div ng-repeat=\"b in msg.payload\">\n  <div class=\"wds-lbl\"><span>{{b.name}}</span><span>{{b.value | number:1}} %</span></div>\n  <div class=\"wds-bar\"><div ng-style=\"{width: (b.value > 100 ? 100 : (b.value < 0 ? 0 : b.value)) + '%', background: b.color}\"></div></div>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": false,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 900,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f0022",
+        "type": "function",
+        "z": "tab_dash",
+        "name": "Split to widgets",
+        "func": "// Fan a reading out to the individual widgets\nconst p = msg.payload;\nconst n = (context.get('n') || 0) + 1;\ncontext.set('n', n);\nconst chartEvery = 2;               // plot every 2nd reading to keep the browser responsive\nconst charts = n % chartEvery === 0;\nreturn [\n    charts ? [{ topic: 'P1 out', payload: p.p1_out }, { topic: 'P2 out', payload: p.p2_out },\n              { topic: 'P3 in', payload: p.p3_in }, { topic: 'P4 in', payload: p.p4_in }] : null,\n    charts ? [{ topic: 'Flow 1', payload: p.f1 }, { topic: 'Flow 2', payload: p.f2 },\n              { topic: 'Flow 3', payload: p.f3 }, { topic: 'Flow 4', payload: p.f4 }] : null,\n    { payload: p.p1_out }, { payload: p.p2_out }, { payload: p.p3_in }, { payload: p.p4_in },\n    { payload: p },\n    { payload: [\n        { name: 'Pump VFD 1', value: p.vfd1, color: '#1f8fb4' },\n        { name: 'Pump VFD 3', value: p.vfd3, color: '#1f8fb4' },\n        { name: 'Pump VFD 4-2', value: p.vfd4_2, color: '#1f8fb4' },\n        { name: 'Analog valve 1', value: p.valve1, color: '#8bc34a' },\n        { name: 'Analog valve 2', value: p.valve2, color: '#8bc34a' } ] }\n];\n",
+        "outputs": 8,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 240,
+        "wires": [
+            [
+                "ch0014"
+            ],
+            [
+                "ch0015"
+            ],
+            [
+                "g0016"
+            ],
+            [
+                "g0017"
+            ],
+            [
+                "g0018"
+            ],
+            [
+                "g0019"
+            ],
+            [
+                "t0020"
+            ],
+            [
+                "t0021"
+            ]
+        ]
+    },
+    {
+        "id": "li_dash",
+        "type": "link in",
+        "z": "tab_dash",
+        "name": "from ingest",
+        "links": [],
+        "x": 230,
+        "y": 240,
+        "wires": [
+            [
+                "f0022"
+            ]
+        ]
+    },
+    {
+        "id": "c0023",
+        "type": "comment",
+        "z": "tab_dash",
+        "name": "Clear charts",
+        "info": "",
+        "x": 160,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "f0024",
+        "type": "function",
+        "z": "tab_dash",
+        "name": "clear",
+        "func": "return [{payload: []}, {payload: []}];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 520,
+        "wires": [
+            [
+                "ch0014"
+            ],
+            [
+                "ch0015"
+            ]
+        ]
+    },
+    {
+        "id": "b0025",
+        "type": "ui_button",
+        "z": "tab_dash",
+        "name": "Clear charts",
+        "group": "ui_grp_flow",
+        "order": 2,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "Clear charts",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "",
+        "topicType": "str",
+        "x": 200,
+        "y": 520,
+        "wires": [
+            [
+                "f0024"
+            ]
+        ]
+    },
+    {
+        "id": "c0026",
+        "type": "comment",
+        "z": "tab_analytics",
+        "name": "④-⑤ predictions published by the Python ML/decision engine (which reads SQLite)",
+        "info": "",
+        "x": 330,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "t0027",
+        "type": "ui_template",
+        "z": "tab_analytics",
+        "group": "ui_grp_state",
+        "name": "System state",
+        "order": 1,
+        "width": 6,
+        "height": 6,
+        "format": "<style>\n.wds-state{border-radius:8px;padding:14px;text-align:center;color:#fff;margin-bottom:8px}\n.st-NORMAL{background:#2e7d32}.st-LEAK{background:#c62828}.st-SENSOR_FAULT{background:#ef6c00}.st-CYBER_ATTACK{background:#6a1b9a}\n.wds-state .big{font-size:26px;font-weight:bold;letter-spacing:1px}\n.wds-kv{width:100%;font-size:13px;border-collapse:collapse}\n.wds-kv td{padding:3px 6px;border-bottom:1px solid #444}.wds-kv td:first-child{color:#9ab;width:45%}\n</style>\n<div ng-if=\"msg.payload\">\n <div class=\"wds-state st-{{msg.payload.state}}\">\n   <div style=\"font-size:12px;opacity:.85\">CONFIRMED SYSTEM STATE</div>\n   <div class=\"big\">{{msg.payload.state.replace('_',' ')}}</div>\n   <div ng-if=\"msg.payload.severity\">severity: <b>{{msg.payload.severity | uppercase}}</b> &nbsp; zone: <b>{{msg.payload.zone}}</b></div>\n   <div ng-if=\"msg.payload.sensor\">faulty sensor: <b>{{msg.payload.sensor}}</b></div>\n </div>\n <table class=\"wds-kv\">\n  <tr><td>Latest prediction</td><td>{{msg.payload.pred_name}} ({{msg.payload.confidence*100 | number:1}} %) <small ng-if=\"msg.payload.source=='rule'\">[physical rule]</small></td></tr>\n  <tr><td>Ground truth</td><td>{{msg.payload.gt_name}}</td></tr>\n  <tr><td>Model</td><td>{{msg.payload.model}}</td></tr>\n  <tr><td>Leak index</td><td>{{msg.payload.leak_index | number:3}}</td></tr>\n  <tr><td>Inference latency</td><td>{{msg.payload.latency_ms | number:2}} ms</td></tr>\n  <tr><td>Sensor → prediction</td><td>{{msg.payload.pipeline_ms}} ms</td></tr>\n </table>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": false,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1000,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "t0028",
+        "type": "ui_template",
+        "z": "tab_analytics",
+        "group": "ui_grp_probs",
+        "name": "Class probabilities",
+        "order": 1,
+        "width": 6,
+        "height": 6,
+        "format": "<style>\n.pb{background:#222;border-radius:3px;height:18px;margin:2px 0 10px 0}\n.pb div{height:18px;border-radius:3px}\n.pl{font-size:13px;display:flex;justify-content:space-between}\n</style>\n<div ng-repeat=\"(k, v) in msg.payload.probs\">\n <div class=\"pl\"><span>{{k}}</span><span>{{v*100 | number:1}} %</span></div>\n <div class=\"pb\"><div ng-style=\"{width:(v*100)+'%', background: {NORMAL:'#4caf50',LEAK:'#e53935',SENSOR_FAULT:'#fb8c00',CYBER_ATTACK:'#8e24aa'}[k]}\"></div></div>\n</div>\n<div style=\"font-size:11px;color:#9ab\">Classes: 0 Normal · 1 Leak · 2 Sensor fault · 3 Cyber-attack</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": false,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1000,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ch0029",
+        "type": "ui_chart",
+        "z": "tab_analytics",
+        "name": "Class (0 Normal, 1 Leak, 2 Sensor fault, 3 Cyber)",
+        "group": "ui_grp_timeline",
+        "order": 1,
+        "width": 8,
+        "height": 4,
+        "label": "Class (0 Normal, 1 Leak, 2 Sensor fault, 3 Cyber)",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "step",
+        "nodata": "waiting for data",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "3.2",
+        "removeOlder": "2",
+        "removeOlderPoints": "600",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#e53935",
+            "#4caf50",
+            "#1f77b4",
+            "#ff7f0e",
+            "#9467bd",
+            "#8c564b",
+            "#e377c2",
+            "#7f7f7f",
+            "#bcbd22"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1000,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ch0030",
+        "type": "ui_chart",
+        "z": "tab_analytics",
+        "name": "Leak index",
+        "group": "ui_grp_timeline",
+        "order": 2,
+        "width": 4,
+        "height": 4,
+        "label": "Leak index",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "waiting for data",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "",
+        "removeOlder": "2",
+        "removeOlderPoints": "600",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#ff7f0e",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1000,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f0031",
+        "type": "function",
+        "z": "tab_analytics",
+        "name": "Prediction → widgets",
+        "func": "const p = msg.payload;\nconst n = (context.get('n') || 0) + 1;\ncontext.set('n', n);\nconst chart = n % 2 === 0;\nreturn [\n    { payload: p },\n    { payload: p },\n    chart ? [{ topic: 'Predicted state', payload: ['NORMAL','LEAK','SENSOR_FAULT','CYBER_ATTACK'].indexOf(p.state) },\n             { topic: 'Ground truth', payload: p.gt_class + 0.05 }] : null,\n    chart ? { topic: 'Leak index', payload: p.leak_index } : null,\n];\n",
+        "outputs": 4,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 760,
+        "y": 140,
+        "wires": [
+            [
+                "t0027"
+            ],
+            [
+                "t0028"
+            ],
+            [
+                "ch0029"
+            ],
+            [
+                "ch0030"
+            ]
+        ]
+    },
+    {
+        "id": "f0032",
+        "type": "function",
+        "z": "tab_analytics",
+        "name": "Store prediction (SQLite)",
+        "func": "const db = global.get('db');\nlet stmt = context.get('stmt');\nif (!stmt) {\n    stmt = db.prepare(`INSERT INTO predictions (ts, telemetry_id, telemetry_ts, model, pred_class, pred_name,\n        confidence, state, severity, zone, leak_index, gt_class, latency_ms)\n        VALUES (:ts, :telemetry_id, :telemetry_ts, :model, :pred_class, :pred_name, :confidence, :state,\n        :severity, :zone, :leak_index, :gt_class, :latency_ms)`);\n    context.set('stmt', stmt);\n}\nconst p = msg.payload;\nconst row = {};\nfor (const c of ['ts', 'telemetry_id', 'telemetry_ts', 'model', 'pred_class', 'pred_name', 'confidence',\n    'state', 'severity', 'zone', 'leak_index', 'gt_class', 'latency_ms']) row[c] = p[c] ?? null;\nstmt.run(row);\nconst colors = { NORMAL: 'green', LEAK: 'red', SENSOR_FAULT: 'yellow', CYBER_ATTACK: 'red' };\nnode.status({ fill: colors[p.state] || 'grey', shape: 'dot', text: `${p.pred_name} ${(p.confidence * 100).toFixed(0)}% | state ${p.state}` });\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 100,
+        "wires": [
+            [
+                "f0031"
+            ]
+        ]
+    },
+    {
+        "id": "mi0033",
+        "type": "mqtt in",
+        "z": "tab_analytics",
+        "name": "ML prediction",
+        "topic": "wds/analytics/prediction",
+        "qos": "1",
+        "datatype": "json",
+        "broker": "wds_mqtt_broker",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 180,
+        "y": 100,
+        "wires": [
+            [
+                "f0032"
+            ]
+        ]
+    },
+    {
+        "id": "c0034",
+        "type": "comment",
+        "z": "tab_analytics",
+        "name": "Alerts (decision engine + Node-RED edge rule)",
+        "info": "",
+        "x": 230,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "t0035",
+        "type": "ui_template",
+        "z": "tab_analytics",
+        "group": "ui_grp_alerts",
+        "name": "Alert table",
+        "order": 1,
+        "width": 12,
+        "height": 6,
+        "format": "<style>\n.at{width:100%;border-collapse:collapse;font-size:12px}\n.at th{text-align:left;color:#9ab;border-bottom:1px solid #666;padding:3px}\n.at td{border-bottom:1px solid #444;padding:3px;vertical-align:top}\n.lv-CRITICAL{color:#ff5252;font-weight:bold}.lv-WARNING{color:#ffb300;font-weight:bold}.lv-INFO{color:#64b5f6}\n</style>\n<table class=\"at\">\n<tr><th>Time</th><th>Level</th><th>Type</th><th>Message</th><th>Source</th></tr>\n<tr ng-repeat=\"a in msg.payload\">\n <td>{{a.ts | date:'HH:mm:ss'}}</td><td class=\"lv-{{a.level}}\">{{a.level}}</td><td>{{a.type}}</td>\n <td>{{a.message}}</td><td>{{a.source}}</td></tr>\n</table>\n<div ng-if=\"!msg.payload.length\" style=\"color:#9ab\">No alerts yet</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": false,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 760,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ts0036",
+        "type": "ui_toast",
+        "z": "tab_analytics",
+        "position": "top right",
+        "displayTime": "5",
+        "highlight": "#e53935",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "className": "",
+        "topic": "",
+        "name": "Alert pop-up",
+        "x": 750,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "f0037",
+        "type": "function",
+        "z": "tab_analytics",
+        "name": "Store alert + keep list",
+        "func": "const db = global.get('db');\nconst a = msg.payload;\ndb.prepare(`INSERT INTO alerts (ts, source, level, type, message, severity, zone, sensor)\n            VALUES (:ts, :source, :level, :type, :message, :severity, :zone, :sensor)`)\n  .run({ ts: a.ts || Date.now(), source: a.source ?? null, level: a.level ?? null, type: a.type ?? null,\n         message: a.message ?? null, severity: a.severity ?? null, zone: a.zone ?? null, sensor: a.sensor ?? null });\n\n// keep the latest 15 alerts for the table\nconst list = flow.get('alerts') || [];\nlist.unshift(a);\nflow.set('alerts', list.slice(0, 15));\n\nconst toast = (a.level === 'CRITICAL' || a.level === 'WARNING')\n    ? { topic: `${a.level}: ${a.type}`, payload: a.message } : null;\nreturn [{ payload: flow.get('alerts') }, toast];\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 360,
+        "wires": [
+            [
+                "t0035"
+            ],
+            [
+                "ts0036"
+            ]
+        ]
+    },
+    {
+        "id": "mi0038",
+        "type": "mqtt in",
+        "z": "tab_analytics",
+        "name": "alerts",
+        "topic": "wds/alerts",
+        "qos": "1",
+        "datatype": "json",
+        "broker": "wds_mqtt_broker",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 360,
+        "wires": [
+            [
+                "f0037"
+            ]
+        ]
+    },
+    {
+        "id": "c0039",
+        "type": "comment",
+        "z": "tab_analytics",
+        "name": "⑦ control commands (engine/dashboard) and ⑧ actuator acknowledgements",
+        "info": "",
+        "x": 290,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "t0040",
+        "type": "ui_template",
+        "z": "tab_analytics",
+        "group": "ui_grp_actions",
+        "name": "Action log",
+        "order": 1,
+        "width": 6,
+        "height": 6,
+        "format": "<style>\n.at{width:100%;border-collapse:collapse;font-size:12px}\n.at th{text-align:left;color:#9ab;border-bottom:1px solid #666;padding:3px}\n.at td{border-bottom:1px solid #444;padding:3px}\n</style>\n<table class=\"at\">\n<tr><th>Time</th><th>Source</th><th>Action</th><th>Target / value</th><th>Ack</th></tr>\n<tr ng-repeat=\"a in msg.payload\" title=\"{{a.reason}}\">\n <td>{{a.ts | date:'HH:mm:ss'}}</td><td>{{a.source}}</td><td>{{a.action}}</td>\n <td>{{a.target}} {{a.value}}</td>\n <td><span ng-if=\"a.response_ms!==null && a.response_ms!==undefined\">{{a.response_ms}} ms</span>\n     <span ng-if=\"a.effect\" style=\"color:#4caf50\"> {{a.effect}}</span></td></tr>\n</table>\n<div ng-if=\"!msg.payload.length\" style=\"color:#9ab\">No control actions yet</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": false,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1000,
+        "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "t0041",
+        "type": "ui_template",
+        "z": "tab_analytics",
+        "group": "ui_grp_actuators",
+        "name": "Actuator state",
+        "order": 1,
+        "width": 6,
+        "height": 6,
+        "format": "<style>\n.vl{display:inline-block;width:46%;margin:3px 1%;padding:8px 0;border-radius:6px;text-align:center;font-weight:bold;font-size:13px}\n.OPEN{background:#2e7d32}.CLOSED{background:#c62828}\n.kv{font-size:13px;margin-top:8px}.kv span{color:#9ab}\n.mode-SAFE{color:#ff5252;font-weight:bold}.mode-AUTO{color:#4caf50;font-weight:bold}\n</style>\n<div ng-if=\"msg.payload\">\n <div><div ng-repeat=\"(v, s) in msg.payload.valves\" class=\"vl {{s}}\">{{v.replace('iso_','Zone ')}} valve<br>{{s}}</div></div>\n <div class=\"kv\"><span>Controller mode:</span> <b class=\"mode-{{msg.payload.mode}}\">{{msg.payload.mode}}</b></div>\n <div class=\"kv\"><span>Pump setpoints:</span> <span ng-repeat=\"(p, v) in msg.payload.pumps\" style=\"color:#eee\">{{p}} {{v}}% &nbsp;</span></div>\n <div class=\"kv\"><span>Flagged sensors:</span> {{msg.payload.flagged_sensors.length ? msg.payload.flagged_sensors.join(', ') : 'none'}}</div>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": false,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1000,
+        "y": 600,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f0042",
+        "type": "function",
+        "z": "tab_analytics",
+        "name": "Store command",
+        "func": "const db = global.get('db');\nconst c = msg.payload;\ndb.prepare(`INSERT INTO actions (cmd_id, ts, source, action, target, value, reason)\n            VALUES (:cmd_id, :ts, :source, :action, :target, :value, :reason)`)\n  .run({ cmd_id: c.cmd_id ?? null, ts: c.ts || Date.now(), source: c.source ?? null, action: c.action ?? null,\n         target: c.target ?? null, value: c.value === undefined || c.value === null ? null : String(c.value),\n         reason: c.reason ?? null });\nconst log = flow.get('actionLog') || [];\nlog.unshift({ cmd_id: c.cmd_id, ts: c.ts, source: c.source, action: c.action, target: c.target,\n              value: c.value, reason: c.reason, response_ms: null });\nflow.set('actionLog', log.slice(0, 12));\nreturn { payload: flow.get('actionLog') };\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 520,
+        "wires": [
+            [
+                "t0040"
+            ]
+        ]
+    },
+    {
+        "id": "mi0043",
+        "type": "mqtt in",
+        "z": "tab_analytics",
+        "name": "control commands",
+        "topic": "wds/control/cmd",
+        "qos": "1",
+        "datatype": "json",
+        "broker": "wds_mqtt_broker",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 190,
+        "y": 520,
+        "wires": [
+            [
+                "f0042"
+            ]
+        ]
+    },
+    {
+        "id": "f0044",
+        "type": "function",
+        "z": "tab_analytics",
+        "name": "Store acknowledgement",
+        "func": "const db = global.get('db');\nconst a = msg.payload;\nconst log = flow.get('actionLog') || [];\nif (a.type === 'ack' && a.action === 'process_effect') {\n    // effect of the action on the (replayed) process, e.g. leak contained\n    db.prepare(`INSERT INTO actions (cmd_id, ts, source, action, target, value, ack_ts, effect)\n                VALUES (NULL, :ts, 'iot-node', 'process_effect', :target, :value, :ts, :effect)`)\n      .run({ ts: a.ack_ts, target: a.target ?? null, value: String(a.value), effect: a.effect ?? null });\n    log.unshift({ ts: a.ack_ts, source: 'iot-node', action: 'process effect', target: a.effect,\n                  value: `${a.value} readings skipped`, response_ms: null });\n} else if (a.type === 'ack') {\n    const resp = a.cmd_ts ? a.ack_ts - a.cmd_ts : null;\n    db.prepare(`UPDATE actions SET ack_ts = :ack_ts, response_ms = :resp, effect = :effect WHERE cmd_id = :cmd_id`)\n      .run({ ack_ts: a.ack_ts, resp, effect: a.effect ?? null, cmd_id: a.cmd_id ?? '' });\n    const entry = log.find(e => e.cmd_id && e.cmd_id === a.cmd_id);\n    if (entry) { entry.response_ms = resp; entry.effect = a.effect; }\n}\nflow.set('actionLog', log.slice(0, 12));\nreturn [{ payload: flow.get('actionLog') }, { payload: a.state }];\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 580,
+        "wires": [
+            [
+                "t0040"
+            ],
+            [
+                "t0041"
+            ]
+        ]
+    },
+    {
+        "id": "mi0045",
+        "type": "mqtt in",
+        "z": "tab_analytics",
+        "name": "actuator acks",
+        "topic": "wds/actuators/state",
+        "qos": "1",
+        "datatype": "json",
+        "broker": "wds_mqtt_broker",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 180,
+        "y": 580,
+        "wires": [
+            [
+                "f0044"
+            ]
+        ]
+    },
+    {
+        "id": "f0046",
+        "type": "function",
+        "z": "tab_analytics",
+        "name": "state",
+        "func": "return { payload: msg.payload.state };",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 640,
+        "wires": [
+            [
+                "t0041"
+            ]
+        ]
+    },
+    {
+        "id": "mi0047",
+        "type": "mqtt in",
+        "z": "tab_analytics",
+        "name": "actuator state (retained)",
+        "topic": "wds/actuators/state/current",
+        "qos": "1",
+        "datatype": "json",
+        "broker": "wds_mqtt_broker",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 210,
+        "y": 640,
+        "wires": [
+            [
+                "f0046"
+            ]
+        ]
+    },
+    {
+        "id": "c0048",
+        "type": "comment",
+        "z": "tab_control",
+        "name": "Automation settings → wds/engine/config (decision engine)",
+        "info": "",
+        "x": 260,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "mo0049",
+        "type": "mqtt out",
+        "z": "tab_control",
+        "name": "engine config",
+        "topic": "wds/engine/config",
+        "qos": "1",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "wds_mqtt_broker",
+        "x": 900,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "sw0050",
+        "type": "ui_switch",
+        "z": "tab_control",
+        "name": "Auto mode",
+        "label": "Automatic control actions",
+        "tooltip": "OFF = engine only raises alerts / recommendations",
+        "group": "ui_grp_auto",
+        "order": 1,
+        "width": 6,
+        "height": 1,
+        "passthru": false,
+        "decouple": "true",
+        "topic": "auto_mode",
+        "topicType": "str",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "animate": true,
+        "className": "",
+        "x": 410,
+        "y": 100,
+        "wires": [
+            [
+                "f0054"
+            ]
+        ]
+    },
+    {
+        "id": "dd0051",
+        "type": "ui_dropdown",
+        "z": "tab_control",
+        "name": "Model",
+        "label": "Active ML model",
+        "tooltip": "",
+        "place": "select model",
+        "group": "ui_grp_auto",
+        "order": 2,
+        "width": 6,
+        "height": 1,
+        "passthru": false,
+        "multiple": false,
+        "options": [
+            {
+                "label": "extra_trees",
+                "value": "extra_trees",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "active_model",
+        "topicType": "str",
+        "className": "",
+        "x": 400,
+        "y": 140,
+        "wires": [
+            [
+                "f0054"
+            ]
+        ]
+    },
+    {
+        "id": "sl0052",
+        "type": "ui_slider",
+        "z": "tab_control",
+        "name": "Min confidence",
+        "label": "Min. confidence to vote",
+        "tooltip": "",
+        "group": "ui_grp_auto",
+        "order": 3,
+        "width": 6,
+        "height": 1,
+        "passthru": false,
+        "outs": "end",
+        "topic": "min_confidence",
+        "topicType": "str",
+        "min": "0.3",
+        "max": "0.95",
+        "step": "0.05",
+        "className": "",
+        "x": 410,
+        "y": 180,
+        "wires": [
+            [
+                "f0054"
+            ]
+        ]
+    },
+    {
+        "id": "sl0053",
+        "type": "ui_slider",
+        "z": "tab_control",
+        "name": "Votes required",
+        "label": "Votes required (of last 5)",
+        "tooltip": "",
+        "group": "ui_grp_auto",
+        "order": 4,
+        "width": 6,
+        "height": 1,
+        "passthru": false,
+        "outs": "end",
+        "topic": "votes_required",
+        "topicType": "str",
+        "min": "1",
+        "max": "5",
+        "step": "1",
+        "className": "",
+        "x": 410,
+        "y": 220,
+        "wires": [
+            [
+                "f0054"
+            ]
+        ]
+    },
+    {
+        "id": "f0054",
+        "type": "function",
+        "z": "tab_control",
+        "name": "→ config message",
+        "func": "// one setting -> engine config message\nconst out = {};\nout[msg.topic] = msg.payload;\nreturn { payload: out };\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 680,
+        "y": 140,
+        "wires": [
+            [
+                "mo0049"
+            ]
+        ]
+    },
+    {
+        "id": "b0055",
+        "type": "ui_button",
+        "z": "tab_control",
+        "name": "Reset live KPIs",
+        "group": "ui_grp_auto",
+        "order": 5,
+        "width": 6,
+        "height": 1,
+        "passthru": false,
+        "label": "Reset live KPIs",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "{\"reset_kpis\": true}",
+        "payloadType": "json",
+        "topic": "",
+        "topicType": "str",
+        "x": 410,
+        "y": 260,
+        "wires": [
+            [
+                "mo0049"
+            ]
+        ]
+    },
+    {
+        "id": "c0056",
+        "type": "comment",
+        "z": "tab_control",
+        "name": "Engine's current settings (retained) → update the widgets",
+        "info": "",
+        "x": 250,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "f0057",
+        "type": "function",
+        "z": "tab_control",
+        "name": "update widgets",
+        "func": "const c = msg.payload;\nflow.set('engineCfg', c);\nnode.status({ fill: c.auto_mode ? 'green' : 'grey', shape: 'dot', text: `${c.active_model} | auto=${c.auto_mode}` });\nreturn [\n    { payload: c.auto_mode },\n    { options: c.available_models.map(m => ({ [m + (m === c.best_model ? ' (best)' : '')]: m })), payload: c.active_model },\n    { payload: c.min_confidence },\n    { payload: c.votes_required },\n];\n",
+        "outputs": 4,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 380,
+        "wires": [
+            [
+                "sw0050"
+            ],
+            [
+                "dd0051"
+            ],
+            [
+                "sl0052"
+            ],
+            [
+                "sl0053"
+            ]
+        ]
+    },
+    {
+        "id": "mi0058",
+        "type": "mqtt in",
+        "z": "tab_control",
+        "name": "engine config (current)",
+        "topic": "wds/engine/config/current",
+        "qos": "1",
+        "datatype": "json",
+        "broker": "wds_mqtt_broker",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 190,
+        "y": 380,
+        "wires": [
+            [
+                "f0057"
+            ]
+        ]
+    },
+    {
+        "id": "c0059",
+        "type": "comment",
+        "z": "tab_control",
+        "name": "Manual override → wds/control/cmd (operator commands go straight to the actuator node)",
+        "info": "",
+        "x": 330,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "mo0060",
+        "type": "mqtt out",
+        "z": "tab_control",
+        "name": "control command",
+        "topic": "wds/control/cmd",
+        "qos": "1",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "wds_mqtt_broker",
+        "x": 920,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "f0061",
+        "type": "function",
+        "z": "tab_control",
+        "name": "build command",
+        "func": "// add id/timestamp so the acknowledgement can be matched\nconst c = Object.assign({}, msg.payload);\nc.cmd_id = 'ui-' + Date.now();\nc.ts = Date.now();\nc.source = 'dashboard';\nc.reason = c.reason || 'manual override from dashboard';\nreturn { payload: c };\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 560,
+        "wires": [
+            [
+                "mo0060"
+            ]
+        ]
+    },
+    {
+        "id": "b0062",
+        "type": "ui_button",
+        "z": "tab_control",
+        "name": "Isolate zone A",
+        "group": "ui_grp_manual",
+        "order": 1,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "Isolate zone A",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "#c62828",
+        "className": "",
+        "icon": "",
+        "payload": "{\"action\": \"isolate_zone\", \"target\": \"A\"}",
+        "payloadType": "json",
+        "topic": "",
+        "topicType": "str",
+        "x": 410,
+        "y": 500,
+        "wires": [
+            [
+                "f0061"
+            ]
+        ]
+    },
+    {
+        "id": "b0063",
+        "type": "ui_button",
+        "z": "tab_control",
+        "name": "Isolate zone B",
+        "group": "ui_grp_manual",
+        "order": 2,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "Isolate zone B",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "#c62828",
+        "className": "",
+        "icon": "",
+        "payload": "{\"action\": \"isolate_zone\", \"target\": \"B\"}",
+        "payloadType": "json",
+        "topic": "",
+        "topicType": "str",
+        "x": 410,
+        "y": 540,
+        "wires": [
+            [
+                "f0061"
+            ]
+        ]
+    },
+    {
+        "id": "b0064",
+        "type": "ui_button",
+        "z": "tab_control",
+        "name": "Isolate zone C",
+        "group": "ui_grp_manual",
+        "order": 3,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "Isolate zone C",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "#c62828",
+        "className": "",
+        "icon": "",
+        "payload": "{\"action\": \"isolate_zone\", \"target\": \"C\"}",
+        "payloadType": "json",
+        "topic": "",
+        "topicType": "str",
+        "x": 410,
+        "y": 580,
+        "wires": [
+            [
+                "f0061"
+            ]
+        ]
+    },
+    {
+        "id": "b0065",
+        "type": "ui_button",
+        "z": "tab_control",
+        "name": "Isolate zone D",
+        "group": "ui_grp_manual",
+        "order": 4,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "Isolate zone D",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "#c62828",
+        "className": "",
+        "icon": "",
+        "payload": "{\"action\": \"isolate_zone\", \"target\": \"D\"}",
+        "payloadType": "json",
+        "topic": "",
+        "topicType": "str",
+        "x": 410,
+        "y": 620,
+        "wires": [
+            [
+                "f0061"
+            ]
+        ]
+    },
+    {
+        "id": "b0066",
+        "type": "ui_button",
+        "z": "tab_control",
+        "name": "Safe mode ON",
+        "group": "ui_grp_manual",
+        "order": 5,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "Safe mode ON",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "#6a1b9a",
+        "className": "",
+        "icon": "",
+        "payload": "{\"action\": \"safe_mode\", \"value\": true}",
+        "payloadType": "json",
+        "topic": "",
+        "topicType": "str",
+        "x": 410,
+        "y": 660,
+        "wires": [
+            [
+                "f0061"
+            ]
+        ]
+    },
+    {
+        "id": "b0067",
+        "type": "ui_button",
+        "z": "tab_control",
+        "name": "Safe mode OFF",
+        "group": "ui_grp_manual",
+        "order": 6,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "Safe mode OFF",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "{\"action\": \"safe_mode\", \"value\": false}",
+        "payloadType": "json",
+        "topic": "",
+        "topicType": "str",
+        "x": 410,
+        "y": 700,
+        "wires": [
+            [
+                "f0061"
+            ]
+        ]
+    },
+    {
+        "id": "b0068",
+        "type": "ui_button",
+        "z": "tab_control",
+        "name": "Restore all (open valves, 100% pumps)",
+        "group": "ui_grp_manual",
+        "order": 7,
+        "width": 6,
+        "height": 1,
+        "passthru": false,
+        "label": "Restore all (open valves, 100% pumps)",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "#2e7d32",
+        "className": "",
+        "icon": "",
+        "payload": "{\"action\": \"restore\"}",
+        "payloadType": "json",
+        "topic": "",
+        "topicType": "str",
+        "x": 410,
+        "y": 740,
+        "wires": [
+            [
+                "f0061"
+            ]
+        ]
+    },
+    {
+        "id": "f0069",
+        "type": "function",
+        "z": "tab_control",
+        "name": "pump command",
+        "func": "return { payload: { action: 'set_pump', target: 'pump1', value: msg.payload } };",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 800,
+        "wires": [
+            [
+                "f0061"
+            ]
+        ]
+    },
+    {
+        "id": "sl0070",
+        "type": "ui_slider",
+        "z": "tab_control",
+        "name": "Pump 1 speed",
+        "label": "Pump 1 setpoint (%)",
+        "tooltip": "",
+        "group": "ui_grp_manual",
+        "order": 8,
+        "width": 6,
+        "height": 1,
+        "passthru": false,
+        "outs": "end",
+        "topic": "",
+        "topicType": "str",
+        "min": "30",
+        "max": "100",
+        "step": "5",
+        "className": "",
+        "x": 300,
+        "y": 800,
+        "wires": [
+            [
+                "f0069"
+            ]
+        ]
+    },
+    {
+        "id": "c0071",
+        "type": "comment",
+        "z": "tab_control",
+        "name": "Scenario injection → wds/sim/control (demo / viva)",
+        "info": "",
+        "x": 240,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "mo0072",
+        "type": "mqtt out",
+        "z": "tab_control",
+        "name": "simulator control",
+        "topic": "wds/sim/control",
+        "qos": "1",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "wds_mqtt_broker",
+        "x": 900,
+        "y": 960,
+        "wires": []
+    },
+    {
+        "id": "b0073",
+        "type": "ui_button",
+        "z": "tab_control",
+        "name": "Clean",
+        "group": "ui_grp_scenario",
+        "order": 1,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "Clean",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "{\"action\": \"play\", \"scenario\": \"clean\"}",
+        "payloadType": "json",
+        "topic": "",
+        "topicType": "str",
+        "x": 410,
+        "y": 920,
+        "wires": [
+            [
+                "mo0072"
+            ]
+        ]
+    },
+    {
+        "id": "b0074",
+        "type": "ui_button",
+        "z": "tab_control",
+        "name": "Leak 1 (large)",
+        "group": "ui_grp_scenario",
+        "order": 2,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "Leak 1 (large)",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "{\"action\": \"play\", \"scenario\": \"leak1\", \"start\": 450}",
+        "payloadType": "json",
+        "topic": "",
+        "topicType": "str",
+        "x": 410,
+        "y": 960,
+        "wires": [
+            [
+                "mo0072"
+            ]
+        ]
+    },
+    {
+        "id": "b0075",
+        "type": "ui_button",
+        "z": "tab_control",
+        "name": "Leak 2",
+        "group": "ui_grp_scenario",
+        "order": 3,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "Leak 2",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "{\"action\": \"play\", \"scenario\": \"leak2\", \"start\": 450}",
+        "payloadType": "json",
+        "topic": "",
+        "topicType": "str",
+        "x": 410,
+        "y": 1000,
+        "wires": [
+            [
+                "mo0072"
+            ]
+        ]
+    },
+    {
+        "id": "b0076",
+        "type": "ui_button",
+        "z": "tab_control",
+        "name": "Leak 3",
+        "group": "ui_grp_scenario",
+        "order": 4,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "Leak 3",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "{\"action\": \"play\", \"scenario\": \"leak3\", \"start\": 550}",
+        "payloadType": "json",
+        "topic": "",
+        "topicType": "str",
+        "x": 410,
+        "y": 1040,
+        "wires": [
+            [
+                "mo0072"
+            ]
+        ]
+    },
+    {
+        "id": "b0077",
+        "type": "ui_button",
+        "z": "tab_control",
+        "name": "Sensor fault P2",
+        "group": "ui_grp_scenario",
+        "order": 5,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "Sensor fault P2",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "{\"action\": \"play\", \"scenario\": \"sensor23\", \"start\": 850}",
+        "payloadType": "json",
+        "topic": "",
+        "topicType": "str",
+        "x": 410,
+        "y": 1080,
+        "wires": [
+            [
+                "mo0072"
+            ]
+        ]
+    },
+    {
+        "id": "b0078",
+        "type": "ui_button",
+        "z": "tab_control",
+        "name": "Sensor fault P3/P4",
+        "group": "ui_grp_scenario",
+        "order": 6,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "Sensor fault P3/P4",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "{\"action\": \"play\", \"scenario\": \"sensor45\", \"start\": 230}",
+        "payloadType": "json",
+        "topic": "",
+        "topicType": "str",
+        "x": 410,
+        "y": 1120,
+        "wires": [
+            [
+                "mo0072"
+            ]
+        ]
+    },
+    {
+        "id": "b0079",
+        "type": "ui_button",
+        "z": "tab_control",
+        "name": "Cyber-attack",
+        "group": "ui_grp_scenario",
+        "order": 7,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "Cyber-attack",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "{\"action\": \"play\", \"scenario\": \"cyber\", \"start\": 1650}",
+        "payloadType": "json",
+        "topic": "",
+        "topicType": "str",
+        "x": 410,
+        "y": 1160,
+        "wires": [
+            [
+                "mo0072"
+            ]
+        ]
+    },
+    {
+        "id": "b0080",
+        "type": "ui_button",
+        "z": "tab_control",
+        "name": "Next in playlist",
+        "group": "ui_grp_scenario",
+        "order": 8,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "Next in playlist",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "{\"action\": \"next\"}",
+        "payloadType": "json",
+        "topic": "",
+        "topicType": "str",
+        "x": 410,
+        "y": 1200,
+        "wires": [
+            [
+                "mo0072"
+            ]
+        ]
+    },
+    {
+        "id": "b0081",
+        "type": "ui_button",
+        "z": "tab_control",
+        "name": "Pause",
+        "group": "ui_grp_scenario",
+        "order": 9,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "Pause",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "{\"action\": \"pause\"}",
+        "payloadType": "json",
+        "topic": "",
+        "topicType": "str",
+        "x": 410,
+        "y": 1240,
+        "wires": [
+            [
+                "mo0072"
+            ]
+        ]
+    },
+    {
+        "id": "b0082",
+        "type": "ui_button",
+        "z": "tab_control",
+        "name": "Resume",
+        "group": "ui_grp_scenario",
+        "order": 10,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "Resume",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "{\"action\": \"resume\"}",
+        "payloadType": "json",
+        "topic": "",
+        "topicType": "str",
+        "x": 410,
+        "y": 1280,
+        "wires": [
+            [
+                "mo0072"
+            ]
+        ]
+    },
+    {
+        "id": "f0083",
+        "type": "function",
+        "z": "tab_control",
+        "name": "rate",
+        "func": "return { payload: { action: 'rate', value: msg.payload } };",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 1340,
+        "wires": [
+            [
+                "mo0072"
+            ]
+        ]
+    },
+    {
+        "id": "sl0084",
+        "type": "ui_slider",
+        "z": "tab_control",
+        "name": "Rate",
+        "label": "Replay speed (readings/s)",
+        "tooltip": "",
+        "group": "ui_grp_scenario",
+        "order": 11,
+        "width": 6,
+        "height": 1,
+        "passthru": false,
+        "outs": "end",
+        "topic": "",
+        "topicType": "str",
+        "min": "1",
+        "max": "20",
+        "step": "1",
+        "className": "",
+        "x": 400,
+        "y": 1340,
+        "wires": [
+            [
+                "f0083"
+            ]
+        ]
+    },
+    {
+        "id": "t0085",
+        "type": "ui_template",
+        "z": "tab_control",
+        "group": "ui_grp_scenario",
+        "name": "Simulator status",
+        "order": 0,
+        "width": 6,
+        "height": 2,
+        "format": "<div ng-if=\"msg.payload\" style=\"font-size:13px\">\n IoT node: <b ng-style=\"{color: msg.payload.online ? '#4caf50' : '#ff5252'}\">{{msg.payload.online ? 'ONLINE' : 'OFFLINE'}}</b><br>\n Playing <b>{{msg.payload.scenario}}</b> row {{msg.payload.row}} / {{msg.payload.end}} at {{msg.payload.rate_hz}} Hz\n <span ng-if=\"msg.payload.paused\" style=\"color:#ffb300\">(paused)</span>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": false,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 640,
+        "y": 1400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "li_simstat",
+        "type": "link in",
+        "z": "tab_control",
+        "name": "sim status",
+        "links": [],
+        "x": 400,
+        "y": 1400,
+        "wires": [
+            [
+                "t0085"
+            ]
+        ]
+    },
+    {
+        "id": "c0086",
+        "type": "comment",
+        "z": "tab_control",
+        "name": "Database maintenance",
+        "info": "",
+        "x": 180,
+        "y": 1480,
+        "wires": []
+    },
+    {
+        "id": "ts0087",
+        "type": "ui_toast",
+        "z": "tab_control",
+        "position": "top right",
+        "displayTime": "3",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "className": "",
+        "topic": "",
+        "name": "",
+        "x": 770,
+        "y": 1520,
+        "wires": []
+    },
+    {
+        "id": "f0088",
+        "type": "function",
+        "z": "tab_control",
+        "name": "clear all tables",
+        "func": "const db = global.get('db');\nfor (const t of ['telemetry', 'predictions', 'alerts', 'actions', 'kpi_log']) db.exec(`DELETE FROM ${t}`);\ndb.exec('VACUUM');\nflow.set('alerts', []);\nnode.status({ fill: 'blue', shape: 'dot', text: 'cleared ' + new Date().toLocaleTimeString() });\nreturn { topic: 'Database', payload: 'All recorded data deleted' };\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 1520,
+        "wires": [
+            [
+                "ts0087"
+            ]
+        ]
+    },
+    {
+        "id": "b0089",
+        "type": "ui_button",
+        "z": "tab_control",
+        "name": "Clear database",
+        "group": "ui_grp_dbadmin",
+        "order": 1,
+        "width": 6,
+        "height": 1,
+        "passthru": false,
+        "label": "Clear database (delete all rows)",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "#555555",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "",
+        "topicType": "str",
+        "x": 330,
+        "y": 1520,
+        "wires": [
+            [
+                "f0088"
+            ]
+        ]
+    },
+    {
+        "id": "c0090",
+        "type": "comment",
+        "z": "tab_perf",
+        "name": "Closed-loop KPIs published by the decision engine every 2 s (stored every 10 s)",
+        "info": "",
+        "x": 330,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "t0091",
+        "type": "ui_template",
+        "z": "tab_perf",
+        "group": "ui_grp_kpi",
+        "name": "KPI table",
+        "order": 1,
+        "width": 12,
+        "height": 12,
+        "format": "<style>\n.kt{width:100%;border-collapse:collapse;font-size:13px}\n.kt td{border-bottom:1px solid #444;padding:4px 6px}\n.kt td:first-child{color:#9ab;width:45%}\n.kt tr.h td{color:#5ac0e2;font-weight:bold;border-bottom:1px solid #5ac0e2;padding-top:10px}\n</style>\n<table class=\"kt\"><tr ng-repeat=\"r in msg.payload\" ng-class=\"{h: r[1]===''}\"><td>{{r[0]}}</td><td>{{r[1]}}</td></tr></table>\n<div ng-if=\"!msg.payload\" style=\"color:#9ab\">Waiting for the decision engine ...</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": false,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 760,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f0092",
+        "type": "function",
+        "z": "tab_perf",
+        "name": "Format KPIs (+ store)",
+        "func": "const k = msg.payload;\nconst n = (context.get('n') || 0) + 1;\ncontext.set('n', n);\nif (n % 5 === 0) {\n    global.get('db').prepare('INSERT INTO kpi_log (ts, data) VALUES (:ts, :data)')\n        .run({ ts: k.ts, data: JSON.stringify(k) });\n}\nconst s = (o, unit) => o ? `${o.mean} ${unit} (min ${o.min}, max ${o.max}, n=${o.n})` : '—';\nconst pct = v => v === null || v === undefined ? '—' : (v * 100).toFixed(2) + ' %';\nconst rows = [\n    ['ML performance (online)', ''],\n    ['Readings classified', k.readings],\n    ['Online accuracy', pct(k.online_accuracy)],\n    ['Recall per class', Object.entries(k.online_recall || {}).map(([c, v]) => `${c} ${pct(v)}`).join(' · ')],\n    ['Alarm-state share while actually normal (incl. restore hold-off)', pct(k.false_alarm_rate)],\n    ['Events: true / detected / missed / false / wrong class',\n        `${k.true_events} / ${k.detected_events} / ${k.missed_events} / ${k.false_events} / ${k.wrong_class_events}`],\n    ['Closed-loop performance', ''],\n    ['Detection delay (true onset → confirmed)', s(k.detection_delay_ms, 'ms')],\n    ['Detection delay in readings', s(k.detection_delay_samples, '')],\n    ['Response time (command → actuator ack)', s(k.response_time_ms, 'ms')],\n    ['End-to-end latency (sensor reading → actuator ack)', s(k.end_to_end_latency_ms, 'ms')],\n    ['True onset → first action', s(k.onset_to_action_ms, 'ms')],\n    ['Control actions (engine) / unnecessary (corrective action while normal)', `${k.actions_total} / ${k.actions_while_normal}`],\n    ['Manual overrides / valve closures', `${k.manual_actions} / ${k.valve_cycles}`],\n    ['Process effects', JSON.stringify(k.process_effects)],\n    ['Estimated water saved by isolation (flow-units × s)', k.water_saved],\n    ['Computational performance', ''],\n    ['Inference latency', s(k.inference_ms, 'ms')],\n    ['Sensor → prediction pipeline latency', s(k.pipeline_latency_ms, 'ms')],\n    ['Decision engine CPU / memory', `${k.engine_cpu_percent} % / ${k.engine_memory_mb} MB`],\n    ['Active model / auto mode / state', `${k.active_model} / ${k.auto_mode} / ${k.state}`],\n    ['Uptime', `${k.uptime_s} s`],\n];\nnode.status({ text: `acc ${pct(k.online_accuracy)} | events ${k.detected_events}/${k.true_events}` });\nreturn { payload: rows };\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 100,
+        "wires": [
+            [
+                "t0091"
+            ]
+        ]
+    },
+    {
+        "id": "mi0093",
+        "type": "mqtt in",
+        "z": "tab_perf",
+        "name": "KPIs",
+        "topic": "wds/engine/kpi",
+        "qos": "1",
+        "datatype": "json",
+        "broker": "wds_mqtt_broker",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 100,
+        "wires": [
+            [
+                "f0092"
+            ]
+        ]
+    },
+    {
+        "id": "c0094",
+        "type": "comment",
+        "z": "tab_perf",
+        "name": "Offline evaluation results written by `python -m ml.train` (ml/results/metrics.json)",
+        "info": "",
+        "x": 340,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "t0095",
+        "type": "ui_template",
+        "z": "tab_perf",
+        "group": "ui_grp_models",
+        "name": "Model table",
+        "order": 1,
+        "width": 12,
+        "height": 14,
+        "format": "<style>\n.mt{width:100%;border-collapse:collapse;font-size:12px}\n.mt th{text-align:right;color:#9ab;border-bottom:1px solid #666;padding:4px}\n.mt td{text-align:right;border-bottom:1px solid #444;padding:4px}\n.mt td:first-child,.mt th:first-child,.mt td:nth-child(2),.mt th:nth-child(2){text-align:left}\n.mt tr.best td{background:#1b3a4b;font-weight:bold}\n.imgs img{max-width:49%;background:#fff;margin-top:8px}\n</style>\n<div ng-if=\"msg.payload\">\n<div style=\"font-size:12px;color:#9ab\">Trained {{msg.payload.generated}} · train {{msg.payload.n_train}} / test {{msg.payload.n_test}} readings · highlighted = deployed model</div>\n<table class=\"mt\">\n<tr><th>Model</th><th>Family</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1</th><th>False alarm</th>\n<th>Leak recall</th><th>Train [s]</th><th>CPU [%]</th><th>Mem [MB]</th><th>Size [KB]</th><th>Latency [ms]</th></tr>\n<tr ng-repeat=\"r in msg.payload.rows\" ng-class=\"{best:r.best}\">\n<td>{{r.name}}</td><td>{{r.family}}</td><td>{{r.accuracy|number:4}}</td><td>{{r.precision|number:4}}</td>\n<td>{{r.recall|number:4}}</td><td>{{r.f1|number:4}}</td><td>{{r.far|number:4}}</td><td>{{r.recall_cls.LEAK.recall|number:3}}</td>\n<td>{{r.train|number:2}}</td><td>{{r.cpu|number:0}}</td><td>{{r.mem|number:1}}</td><td>{{r.size|number:0}}</td><td>{{r.latency|number:2}}</td></tr>\n</table>\n<div style=\"font-size:12px;margin-top:8px\">Leak severity thresholds (leak index): minor &lt; {{msg.payload.thresholds.moderate|number:3}} ≤ moderate &lt; {{msg.payload.thresholds.severe|number:3}} ≤ severe.\n <span ng-repeat=\"(k,v) in msg.payload.leaks\"> {{k}}: index {{v.mean_leak_index|number:2}}, zone {{v.suspected_zone}};</span></div>\n<div class=\"imgs\"><img ng-src=\"/results/model_comparison.png?t={{msg.payload.t}}\"><img ng-src=\"/results/confusion_matrices.png?t={{msg.payload.t}}\"></div>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": false,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 980,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "j0096",
+        "type": "json",
+        "z": "tab_perf",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 650,
+        "y": 260,
+        "wires": [
+            [
+                "f0097"
+            ]
+        ]
+    },
+    {
+        "id": "f0097",
+        "type": "function",
+        "z": "tab_perf",
+        "name": "Format model table",
+        "func": "const m = msg.payload;\nconst rows = Object.entries(m.models).map(([name, r]) => ({\n    name, family: r.family, best: name === m.best_model,\n    accuracy: r.accuracy, precision: r.precision, recall: r.recall, f1: r.f1, far: r.false_alarm_rate,\n    train: r.train_time_s, cpu: r.cpu_percent, mem: r.memory_mb, size: r.model_size_kb, latency: r.latency_ms,\n    recall_cls: r.per_class }));\nreturn { payload: { rows, generated: m.generated, n_train: m.n_train, n_test: m.n_test,\n    thresholds: m.severity_thresholds, leaks: m.leak_events, t: Date.now() } };\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 800,
+        "y": 300,
+        "wires": [
+            [
+                "t0095"
+            ]
+        ]
+    },
+    {
+        "id": "fi0098",
+        "type": "file in",
+        "z": "tab_perf",
+        "name": "read metrics.json",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "utf8",
+        "allProps": false,
+        "x": 500,
+        "y": 260,
+        "wires": [
+            [
+                "j0096"
+            ]
+        ]
+    },
+    {
+        "id": "f0099",
+        "type": "function",
+        "z": "tab_perf",
+        "name": "metrics path",
+        "func": "msg.filename = global.get('wdsRoot') + '/ml/results/metrics.json';\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 260,
+        "wires": [
+            [
+                "fi0098"
+            ]
+        ]
+    },
+    {
+        "id": "i0100",
+        "type": "inject",
+        "z": "tab_perf",
+        "name": "on start",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "2",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 240,
+        "wires": [
+            [
+                "f0099"
+            ]
+        ]
+    },
+    {
+        "id": "b0101",
+        "type": "ui_button",
+        "z": "tab_perf",
+        "name": "Reload results",
+        "group": "ui_grp_models",
+        "order": 2,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "Reload results",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "",
+        "topicType": "str",
+        "x": 150,
+        "y": 290,
+        "wires": [
+            [
+                "f0099"
+            ]
+        ]
+    },
+    {
+        "id": "c0102",
+        "type": "comment",
+        "z": "tab_perf",
+        "name": "Row counts of every table (every 5 s)",
+        "info": "",
+        "x": 210,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "t0103",
+        "type": "ui_template",
+        "z": "tab_perf",
+        "group": "ui_grp_dbstats",
+        "name": "DB stats",
+        "order": 1,
+        "width": 6,
+        "height": 5,
+        "format": "<table style=\"width:100%;font-size:13px;border-collapse:collapse\">\n<tr ng-repeat=\"(k, v) in msg.payload\"><td style=\"color:#9ab;padding:3px;border-bottom:1px solid #444\">{{k}}</td>\n<td style=\"text-align:right;padding:3px;border-bottom:1px solid #444\">{{v === null ? '—' : v}}</td></tr></table>",
+        "storeOutMessages": true,
+        "fwdInMessages": false,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 640,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f0104",
+        "type": "function",
+        "z": "tab_perf",
+        "name": "Count rows",
+        "func": "const db = global.get('db');\nconst out = {};\nfor (const t of ['telemetry', 'predictions', 'alerts', 'actions', 'kpi_log']) {\n    out[t] = db.prepare(`SELECT COUNT(*) AS n FROM ${t}`).get().n;\n}\nconst last = db.prepare('SELECT AVG(received_ts - ts) AS transit FROM (SELECT * FROM telemetry ORDER BY id DESC LIMIT 100)').get();\nout.avg_transit_ms = last.transit === null ? null : Math.round(last.transit);\nconst resp = db.prepare('SELECT AVG(response_ms) AS r FROM actions WHERE response_ms IS NOT NULL').get();\nout.avg_response_ms = resp.r === null ? null : Math.round(resp.r);\nreturn { payload: out };\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 420,
+        "wires": [
+            [
+                "t0103"
+            ]
+        ]
+    },
+    {
+        "id": "i0105",
+        "type": "inject",
+        "z": "tab_perf",
+        "name": "every 5 s",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "3",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 190,
+        "y": 420,
+        "wires": [
+            [
+                "f0104"
+            ]
+        ]
+    }
+]

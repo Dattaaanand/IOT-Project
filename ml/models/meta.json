@@ -1,0 +1,118 @@
+{
+  "short_window": 10,
+  "baseline_window": 60,
+  "seq_len": 30,
+  "classes": [
+    "NORMAL",
+    "LEAK",
+    "SENSOR_FAULT",
+    "CYBER_ATTACK"
+  ],
+  "feature_names": [
+    "p1_out",
+    "p2_out",
+    "p3_in",
+    "p4_in",
+    "f1",
+    "f2",
+    "f3",
+    "f4",
+    "vfd1",
+    "vfd2",
+    "vfd3",
+    "vfd4_1",
+    "vfd4_2",
+    "valve1",
+    "valve2",
+    "p1_out_mean10",
+    "p1_out_std10",
+    "p1_out_dev60",
+    "p1_out_diff",
+    "p2_out_mean10",
+    "p2_out_std10",
+    "p2_out_dev60",
+    "p2_out_diff",
+    "p3_in_mean10",
+    "p3_in_std10",
+    "p3_in_dev60",
+    "p3_in_diff",
+    "p4_in_mean10",
+    "p4_in_std10",
+    "p4_in_dev60",
+    "p4_in_diff",
+    "f1_mean10",
+    "f1_std10",
+    "f1_dev60",
+    "f1_diff",
+    "f2_mean10",
+    "f2_std10",
+    "f2_dev60",
+    "f2_diff",
+    "f3_mean10",
+    "f3_std10",
+    "f3_dev60",
+    "f3_diff",
+    "f4_mean10",
+    "f4_std10",
+    "f4_dev60",
+    "f4_diff",
+    "head_1_2",
+    "head_4_3",
+    "min_pressure",
+    "flow_out_total",
+    "pump1_per_flow",
+    "valve_diff"
+  ],
+  "severity_thresholds": {
+    "moderate": 0.256629886919182,
+    "severe": 1.2008981811462212
+  },
+  "models": {
+    "logistic_regression": {
+      "file": "logistic_regression.joblib",
+      "family": "Traditional ML",
+      "input": "features"
+    },
+    "knn": {
+      "file": "knn.joblib",
+      "family": "Traditional ML",
+      "input": "features"
+    },
+    "decision_tree": {
+      "file": "decision_tree.joblib",
+      "family": "Traditional ML",
+      "input": "features"
+    },
+    "naive_bayes": {
+      "file": "naive_bayes.joblib",
+      "family": "Traditional ML",
+      "input": "features"
+    },
+    "random_forest": {
+      "file": "random_forest.joblib",
+      "family": "Ensemble ML",
+      "input": "features"
+    },
+    "extra_trees": {
+      "file": "extra_trees.joblib",
+      "family": "Ensemble ML",
+      "input": "features"
+    },
+    "gradient_boosting": {
+      "file": "gradient_boosting.joblib",
+      "family": "Ensemble ML",
+      "input": "features"
+    },
+    "mlp": {
+      "file": "mlp.pt",
+      "family": "Deep Learning",
+      "input": "features"
+    },
+    "cnn_lstm": {
+      "file": "cnn_lstm.pt",
+      "family": "Deep Learning",
+      "input": "sequence"
+    }
+  },
+  "best_model": "extra_trees"
+}

@@ -1,0 +1,12 @@
+{
+  "name": "wds-node-red",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Node-RED user directory for the Smart Water Distribution project",
+  "dependencies": {
+    "node-red-dashboard": "3.6.6"
+  },
+  "scripts": {
+    "start": "node-red --userDir . --settings settings.js"
+  }
+}

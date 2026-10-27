@@ -1,0 +1,60 @@
+{
+  "mqtt": {
+    "host": "localhost",
+    "port": 1883
+  },
+  "topics": {
+    "telemetry": "wds/sensors/telemetry",
+    "prediction": "wds/analytics/prediction",
+    "alert": "wds/alerts",
+    "command": "wds/control/cmd",
+    "actuator_state": "wds/actuators/state",
+    "kpi": "wds/engine/kpi",
+    "engine_config": "wds/engine/config",
+    "sim_control": "wds/sim/control",
+    "sim_status": "wds/sim/status"
+  },
+  "dataset_dir": "WDSEventDB-main",
+  "db_path": "data/wds.db",
+
+  "simulator": {
+    "rate_hz": 5,
+    "actuator_delay_ms": 300,
+    "valve_travel_s": 2.0,
+    "playlist": [
+      {"scenario": "clean",    "start": 0,    "end": 400},
+      {"scenario": "leak1"},
+      {"scenario": "clean",    "start": 400,  "end": 700},
+      {"scenario": "sensor23"},
+      {"scenario": "leak2"},
+      {"scenario": "cyber",    "start": 1500, "end": 2400},
+      {"scenario": "leak3"},
+      {"scenario": "sensor45"}
+    ]
+  },
+
+  "ml": {
+    "short_window": 10,
+    "baseline_window": 60,
+    "seq_len": 30,
+    "block_size": 60,
+    "test_fraction": 0.3,
+    "random_state": 42,
+    "active_model": "auto"
+  },
+
+  "decision": {
+    "auto_mode": true,
+    "vote_window": 5,
+    "votes_required": 3,
+    "min_confidence": 0.6,
+    "normal_to_restore": 15,
+    "alert_cooldown_s": 30,
+    "pressure_valid_range": [-4.0, 15.0],
+    "flow_valid_range": [-0.05, 50.0],
+    "pump_normal_speed": 100,
+    "pump_reduction": {"minor": 85, "moderate": 70, "severe": 50},
+    "isolate_from_severity": "moderate",
+    "pump_inefficiency_ratio": 1.6
+  }
+}
