@@ -1,37 +1,24 @@
 {
   "mqtt": {
-    "host": "localhost",
+    "host": "broker.hivemq.com",
     "port": 1883
   },
+  "project_id": "wds-t2-906e031a",
   "topics": {
-    "telemetry": "wds/sensors/telemetry",
-    "prediction": "wds/analytics/prediction",
-    "alert": "wds/alerts",
-    "command": "wds/control/cmd",
-    "actuator_state": "wds/actuators/state",
-    "kpi": "wds/engine/kpi",
-    "engine_config": "wds/engine/config",
-    "sim_control": "wds/sim/control",
-    "sim_status": "wds/sim/status"
+    "telemetry": "wds-t2-906e031a/sensors/telemetry",
+    "prediction": "wds-t2-906e031a/analytics/prediction",
+    "alert": "wds-t2-906e031a/alerts",
+    "command": "wds-t2-906e031a/control/cmd",
+    "actuator_state": "wds-t2-906e031a/actuators/state",
+    "kpi": "wds-t2-906e031a/engine/kpi",
+    "engine_config": "wds-t2-906e031a/engine/config",
+    "sim_control": "wds-t2-906e031a/sim/control",
+    "sim_status": "wds-t2-906e031a/sim/status",
+    "ping": "wds-t2-906e031a/engine/ping",
+    "pong": "wds-t2-906e031a/device/pong"
   },
   "dataset_dir": "WDSEventDB-main",
   "db_path": "data/wds.db",
-
-  "simulator": {
-    "rate_hz": 5,
-    "actuator_delay_ms": 300,
-    "valve_travel_s": 2.0,
-    "playlist": [
-      {"scenario": "clean",    "start": 0,    "end": 400},
-      {"scenario": "leak1"},
-      {"scenario": "clean",    "start": 400,  "end": 700},
-      {"scenario": "sensor23"},
-      {"scenario": "leak2"},
-      {"scenario": "cyber",    "start": 1500, "end": 2400},
-      {"scenario": "leak3"},
-      {"scenario": "sensor45"}
-    ]
-  },
 
   "ml": {
     "short_window": 10,

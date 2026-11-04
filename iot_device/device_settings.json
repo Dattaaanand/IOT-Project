@@ -1,0 +1,15 @@
+{
+  "rate_hz": 5,
+  "actuator_delay_ms": 300,
+  "valve_travel_s": 2.0,
+  "playlist": [
+    {"scenario": "clean",    "start": 0,    "end": 400},
+    {"scenario": "leak1"},
+    {"scenario": "clean",    "start": 400,  "end": 700},
+    {"scenario": "sensor23"},
+    {"scenario": "leak2"},
+    {"scenario": "cyber",    "start": 1500, "end": 2400},
+    {"scenario": "leak3"},
+    {"scenario": "sensor45"}
+  ]
+}

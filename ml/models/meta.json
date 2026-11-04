@@ -68,44 +68,14 @@
     "severe": 1.2008981811462212
   },
   "models": {
-    "logistic_regression": {
-      "file": "logistic_regression.joblib",
-      "family": "Traditional ML",
-      "input": "features"
-    },
     "knn": {
       "file": "knn.joblib",
       "family": "Traditional ML",
       "input": "features"
     },
-    "decision_tree": {
-      "file": "decision_tree.joblib",
-      "family": "Traditional ML",
-      "input": "features"
-    },
-    "naive_bayes": {
-      "file": "naive_bayes.joblib",
-      "family": "Traditional ML",
-      "input": "features"
-    },
-    "random_forest": {
-      "file": "random_forest.joblib",
-      "family": "Ensemble ML",
-      "input": "features"
-    },
     "extra_trees": {
       "file": "extra_trees.joblib",
       "family": "Ensemble ML",
-      "input": "features"
-    },
-    "gradient_boosting": {
-      "file": "gradient_boosting.joblib",
-      "family": "Ensemble ML",
-      "input": "features"
-    },
-    "mlp": {
-      "file": "mlp.pt",
-      "family": "Deep Learning",
       "input": "features"
     },
     "cnn_lstm": {

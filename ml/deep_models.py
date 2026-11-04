@@ -1,6 +1,5 @@
 """PyTorch deep-learning models.
 
-* FeatureMLP  - fully connected network on the engineered feature vector
 * CNNLSTM     - 1D convolution + LSTM on the raw sensor sequence (last `seq_len`
                 readings), so it learns temporal patterns without hand-made features
 """
@@ -9,19 +8,6 @@ import time
 import numpy as np
 import torch
 from torch import nn
-
-
-class FeatureMLP(nn.Module):
-    def __init__(self, n_in, n_classes):
-        super().__init__()
-        self.net = nn.Sequential(
-            nn.Linear(n_in, 128), nn.ReLU(), nn.Dropout(0.2),
-            nn.Linear(128, 64), nn.ReLU(),
-            nn.Linear(64, n_classes),
-        )
-
-    def forward(self, x):
-        return self.net(x)
 
 
 class CNNLSTM(nn.Module):
@@ -38,8 +24,6 @@ class CNNLSTM(nn.Module):
 
 
 def build(kind, n_in, n_classes):
-    if kind == "mlp":
-        return FeatureMLP(n_in, n_classes)
     if kind == "cnn_lstm":
         return CNNLSTM(n_in, n_classes)
     raise ValueError(kind)

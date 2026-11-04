@@ -33,3 +33,4 @@ __MACOSX/
 .idea/
 Thumbs.db
 *.log
+node-red/.config.*.json.backup

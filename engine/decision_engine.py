@@ -21,6 +21,7 @@ import argparse
 import json
 import threading
 import time
+import uuid
 from collections import Counter, deque
 
 import numpy as np
@@ -67,8 +68,14 @@ class DecisionEngine:
         self.cmd_seq = 0
         self.pending = {}            # cmd_id -> command info, waiting for ack
         self.kpi = KPITracker()
+        # The IoT device is another computer with its own clock: device time - cloud time
+        self.clock_offset_ms = 0
+        self.broker_rtt_ms = None
+        self.clock_samples = deque(maxlen=10)
 
-        self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id="wds-decision-engine")
+        # client ids must be unique on a public broker, or clients disconnect each other
+        client_id = f"{cfg['project_id']}-engine-{uuid.uuid4().hex[:6]}"
+        self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id=client_id)
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
         self.client.reconnect_delay_set(1, 10)
@@ -76,7 +83,8 @@ class DecisionEngine:
     # ------------------------------------------------------------------ MQTT in
     def on_connect(self, client, userdata, flags, reason_code, properties):
         print(f"[engine] connected to broker ({reason_code})")
-        client.subscribe([(self.topics["actuator_state"], 1), (self.topics["engine_config"], 1)])
+        client.subscribe([(self.topics["actuator_state"], 1), (self.topics["engine_config"], 1),
+                          (self.topics["pong"], 0)])
         self.publish_config()
 
     def on_message(self, client, userdata, msg):
@@ -89,10 +97,21 @@ class DecisionEngine:
                 self.handle_ack(payload)
             elif msg.topic == self.topics["engine_config"]:
                 self.handle_config(payload)
+            elif msg.topic == self.topics["pong"]:
+                self.handle_pong(payload)
+
+    def handle_pong(self, pong):
+        """NTP-style estimate of the clock difference between device and cloud.
+        The sample with the shortest round trip is the most accurate."""
+        now = now_ms()
+        rtt = now - pong["ping_ts"]
+        self.clock_samples.append((rtt, pong["device_ts"] - (pong["ping_ts"] + now) // 2))
+        self.broker_rtt_ms, self.clock_offset_ms = min(self.clock_samples)
 
     def handle_ack(self, ack):
         if ack.get("type") != "ack":
             return
+        ack["ack_ts"] = now_ms()  # time the ack reached the cloud, comparable with the cloud's command time
         if ack.get("action") == "process_effect" and ack.get("effect") == "leak_isolated" and self.event:
             # volume that would have kept leaking = excess supply flow x skipped readings
             excess = max(0.0, self.event.get("excess_flow", 0.0))
@@ -277,6 +296,7 @@ class DecisionEngine:
             self.window.clear()
             self.baseline_rows.clear()
             self.votes.clear()
+        row["ts"] -= self.clock_offset_ms  # sensor time converted to the cloud clock
         self.window.append(row)
         self.kpi.track_ground_truth(row)
         pred, conf, probs, invalid, source, inference_ms = self.classify(row)
@@ -311,6 +331,7 @@ class DecisionEngine:
 
     def publish_kpis(self):
         info = {"active_model": self.predictor.name, "auto_mode": self.d["auto_mode"],
+                "clock_offset_ms": self.clock_offset_ms, "broker_rtt_ms": self.broker_rtt_ms,
                 "state": CLASS_NAMES[self.event["class"]] if self.event else "NORMAL"}
         summary = self.kpi.summary(info)
         self.publish(self.topics["kpi"], summary)
@@ -321,15 +342,20 @@ class DecisionEngine:
         conn = db.connect()
         last_id = conn.execute("SELECT COALESCE(MAX(id), 0) FROM telemetry").fetchone()[0]
         host, port = self.cfg["mqtt"]["host"], self.cfg["mqtt"]["port"]
-        self.client.connect(host, port, keepalive=30)
+        print(f"[engine] connecting to broker {host}:{port}")
+        self.client.connect_async(host, port, keepalive=30)
         self.client.loop_start()
         print(f"[engine] model={self.predictor.name} ({self.predictor.family}), auto_mode={self.d['auto_mode']}, "
               f"waiting for telemetry after id {last_id}")
         last_kpi = last_save = time.time()
+        last_ping = 0
         try:
             while True:
                 rows = conn.execute("SELECT * FROM telemetry WHERE id > ? ORDER BY id LIMIT 500",
                                     (last_id,)).fetchall()
+                if time.time() - last_ping >= 5:
+                    self.client.publish(self.topics["ping"], json.dumps({"ping_ts": now_ms()}), qos=0)
+                    last_ping = time.time()
                 with self.lock:
                     for r in rows:
                         self.process(dict(r))

@@ -1,4 +1,6 @@
-"""Train and compare traditional ML, ensemble ML and deep-learning models.
+"""Train and compare the best model of each family: k-NN (traditional ML),
+Extra Trees (ensemble ML) and CNN-LSTM (deep learning).
+The selection from 9 candidates is documented in results/model_selection.md.
 
     python -m ml.train            # train everything, write ml/models + ml/results
 
@@ -23,14 +25,11 @@ import numpy as np
 import pandas as pd
 import psutil
 import torch
-from sklearn.ensemble import ExtraTreesClassifier, HistGradientBoostingClassifier, RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, precision_recall_fscore_support
-from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
-from sklearn.tree import DecisionTreeClassifier
 
 from common.config import CLASS_NAMES, NORMAL, SENSORS, abspath, load_config
 from common.dataset import load_all
@@ -46,21 +45,11 @@ N_CLASSES = len(CLASS_NAMES)
 def sklearn_models(seed):
     """name -> (family, estimator). Scale-sensitive models get a StandardScaler."""
     return {
-        "logistic_regression": ("Traditional ML", make_pipeline(
-            StandardScaler(), LogisticRegression(max_iter=3000, class_weight="balanced"))),
         "knn": ("Traditional ML", make_pipeline(
             StandardScaler(), KNeighborsClassifier(n_neighbors=7, weights="distance"))),
-        "decision_tree": ("Traditional ML", DecisionTreeClassifier(
-            max_depth=12, class_weight="balanced", random_state=seed)),
-        "naive_bayes": ("Traditional ML", make_pipeline(StandardScaler(), GaussianNB())),
-        "random_forest": ("Ensemble ML", RandomForestClassifier(
-            n_estimators=150, min_samples_leaf=2, class_weight="balanced_subsample",
-            n_jobs=-1, random_state=seed)),
         "extra_trees": ("Ensemble ML", ExtraTreesClassifier(
             n_estimators=150, min_samples_leaf=2, class_weight="balanced",
             n_jobs=-1, random_state=seed)),
-        "gradient_boosting": ("Ensemble ML", HistGradientBoostingClassifier(
-            max_iter=200, learning_rate=0.1, class_weight="balanced", random_state=seed)),
     }
 
 
@@ -294,15 +283,14 @@ def main():
 
     # deep learning: standardise with training statistics
     for name, arch, Atr, Ate, input_kind in [
-        ("mlp", "mlp", Xtr, Xte, "features"),
         ("cnn_lstm", "cnn_lstm", S[~test], S[test], "sequence"),
     ]:
         print(f"  [Deep Learning] {name}")
-        axes = (0,) if Atr.ndim == 2 else (0, 1)
+        axes = (0, 1)  # one mean/std per sensor
         mean, std = Atr.mean(axis=axes), Atr.std(axis=axes) + 1e-6
         net = deep_models.build(arch, Atr.shape[-1], N_CLASSES)
         with ResourceMeter() as meter:
-            deep_models.fit(net, (Atr - mean) / std, ytr, N_CLASSES, epochs=25 if arch == "mlp" else 15)
+            deep_models.fit(net, (Atr - mean) / std, ytr, N_CLASSES, epochs=15)
         torch.save({"arch": arch, "n_in": Atr.shape[-1], "n_classes": N_CLASSES,
                     "state_dict": net.state_dict(), "mean": mean.tolist(), "std": std.tolist()},
                    os.path.join(MODELS_DIR, f"{name}.pt"))

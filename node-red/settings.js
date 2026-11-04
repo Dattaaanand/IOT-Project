@@ -16,6 +16,10 @@ const ROOT = path.resolve(__dirname, '..');
 const config = JSON.parse(fs.readFileSync(path.join(ROOT, 'config.json'), 'utf8'));
 const DB_PATH = path.resolve(ROOT, config.db_path);
 
+// used by the MQTT broker node as ${MQTT_HOST} / ${MQTT_PORT}
+process.env.MQTT_HOST = config.mqtt.host;
+process.env.MQTT_PORT = String(config.mqtt.port);
+
 fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
 const db = new DatabaseSync(DB_PATH);
 db.exec('PRAGMA busy_timeout = 5000');
