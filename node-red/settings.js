@@ -11,6 +11,7 @@
 const path = require('path');
 const fs = require('fs');
 const { DatabaseSync } = require('node:sqlite');
+const crypto = require('crypto');
 
 const ROOT = path.resolve(__dirname, '..');
 const config = JSON.parse(fs.readFileSync(path.join(ROOT, 'config.json'), 'utf8'));
@@ -39,6 +40,7 @@ module.exports = {
         db,                     // node:sqlite DatabaseSync
         wdsRoot: ROOT,
         wdsConfig: config,
+        crypto,                 // HMAC signing of dashboard commands
     },
     exportGlobalContextKeys: false,
     functionExternalModules: true,

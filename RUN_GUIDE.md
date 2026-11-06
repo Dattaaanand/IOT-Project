@@ -93,6 +93,14 @@ Other things to show:
 3. **Switching models:** choose `knn` or `cnn_lstm` in **Active ML model**, then try a leak. Switch back to `extra_trees` when done.
 4. **Device going offline:** press **Ctrl+C** in your friend's window. The Control Panel changes to **IoT node: OFFLINE** after a moment. Run `run_device.bat` again to reconnect.
 5. **Results:** open the **Performance** page for live KPIs and the model comparison.
+6. **Security (forged command):** on your laptop, run this in the project folder:
+
+```bash
+python tools/attack_demo.py unsigned
+```
+
+   Your friend's window shows `[SECURITY] REJECTED command isolate_zone A: no signature`, and your dashboard pops up a **FORGED_COMMAND** alert. Also try `replay`: click **Restore all** on the dashboard while it waits, and the copied command is rejected as already executed.
+7. **Incident report:** on the **Performance** page, click **Download incident report (CSV)**.
 
 ---
 

@@ -18,12 +18,15 @@ returns to normal. Pump-speed changes and sensor flags do not alter the data.
 """
 import argparse
 import csv
+import hashlib
+import hmac
 import json
 import os
 import sys
 import threading
 import time
 import uuid
+from collections import deque
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "vendor"))  # bundled paho-mqtt, no pip install needed
@@ -40,6 +43,13 @@ ZONE_VALVES = {"A": "iso_A", "B": "iso_B", "C": "iso_C", "D": "iso_D"}
 
 def now_ms():
     return int(time.time() * 1000)
+
+
+def signed_text(cmd):
+    """Same message format as common/security.py on the cloud laptop."""
+    target = cmd.get("target")
+    return "|".join([str(cmd.get("cmd_id") or ""), str(cmd.get("ts") or ""), cmd.get("action") or "",
+                     "" if target is None else str(target), json.dumps(cmd.get("value"))])
 
 
 def load_recording(name):
@@ -69,6 +79,9 @@ class IoTDevice:
         self.pending_skip = None  # (time to apply, reason)
         self.cloud_state = None
         self.last_cloud_msg = 0
+        self.seen_cmd_ids = deque(maxlen=1000)  # replay protection
+        self.rejected = 0
+        self.last_security_alert = 0
 
         # actuator state (pump speed in % of the normal setpoint)
         self.state = {
@@ -150,6 +163,10 @@ class IoTDevice:
             return
         t = msg.topic
         if t == self.topics["command"]:
+            problem = self.check_command(payload)
+            if problem:
+                self.reject_command(payload, problem)
+                return
             self.say(f"[COMMAND] from {payload.get('source')}: {payload.get('action')} "
                      f"{payload.get('target') or ''} {'' if payload.get('value') is None else payload.get('value')}"
                      f"  ({payload.get('reason', '')})")
@@ -163,6 +180,33 @@ class IoTDevice:
             self.say(f"[ALERT]   {payload.get('level')} {payload.get('type')}: {payload.get('message')}")
         elif t == self.topics["prediction"]:
             self.show_prediction(payload)
+
+    def check_command(self, cmd):
+        """Return why a command must be refused, or None if it is genuine."""
+        sec = self.cfg["security"]
+        sig = cmd.get("sig")
+        if not sig:
+            return "no signature"
+        expected = hmac.new(sec["command_key"].encode(), signed_text(cmd).encode(), hashlib.sha256).hexdigest()
+        if not hmac.compare_digest(str(sig), expected):
+            return "invalid signature (forged or altered)"
+        if cmd.get("cmd_id") in self.seen_cmd_ids:
+            return "already executed (replay attack)"
+        age_s = abs(now_ms() - int(cmd.get("ts") or 0)) / 1000
+        if age_s > sec["max_command_age_s"]:
+            return f"too old ({age_s:.0f} s, replay attack)"
+        self.seen_cmd_ids.append(cmd.get("cmd_id"))
+        return None
+
+    def reject_command(self, cmd, problem):
+        self.rejected += 1
+        self.say(f"[SECURITY] REJECTED command {cmd.get('action')} {cmd.get('target') or ''}: {problem}")
+        if time.time() - self.last_security_alert > 5:  # don't flood the broker during an attack
+            self.last_security_alert = time.time()
+            self.client.publish(self.topics["alert"], json.dumps({
+                "ts": now_ms(), "source": "iot-device", "level": "CRITICAL", "type": "FORGED_COMMAND",
+                "message": f"IoT device rejected a command ({cmd.get('action')} {cmd.get('target') or ''}): "
+                           f"{problem}. Rejected so far: {self.rejected}"}), qos=1)
 
     def show_prediction(self, p):
         """Print the cloud's verdict when it changes (it arrives for every reading)."""

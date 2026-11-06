@@ -208,6 +208,20 @@ def plot_comparison(results):
     plt.close(fig)
 
 
+def save_feature_importance(model, names, top=15):
+    """Explainability: impurity-based importance of each feature in the Extra Trees model."""
+    imp = pd.Series(model.feature_importances_, index=names).sort_values(ascending=False)
+    head = imp.head(top)[::-1]
+    fig, ax = plt.subplots(figsize=(8, 5.5))
+    ax.barh(head.index, head.values, color="#F58518")
+    ax.set_title(f"Extra Trees: top {top} most important features")
+    ax.set_xlabel("importance (share of total)")
+    fig.tight_layout()
+    fig.savefig(os.path.join(RESULTS_DIR, "feature_importance.png"), dpi=120)
+    plt.close(fig)
+    return {k: round(float(v), 4) for k, v in imp.head(top).items()}
+
+
 def write_report(results, best, thresholds, leak_events, n_train, n_test):
     lines = ["# Model evaluation report", "",
              f"Train readings: {n_train}, test readings: {n_test} (contiguous-block split).", "",
@@ -303,7 +317,9 @@ def main():
     with open(os.path.join(MODELS_DIR, "meta.json"), "w") as f:
         json.dump(meta, f, indent=2)
 
-    out = {"generated": time.strftime("%Y-%m-%d %H:%M:%S"), "best_model": best,
+    importance = save_feature_importance(joblib.load(os.path.join(MODELS_DIR, "extra_trees.joblib")),
+                                         meta["feature_names"])
+    out = {"generated": time.strftime("%Y-%m-%d %H:%M:%S"), "best_model": best, "feature_importance": importance,
            "n_train": int(len(ytr)), "n_test": int(len(yte)), "classes": CLASS_NAMES,
            "severity_thresholds": thresholds, "leak_events": leak_events, "models": results}
     with open(os.path.join(RESULTS_DIR, "metrics.json"), "w") as f:

@@ -17,6 +17,10 @@
     "ping": "wds-t2-906e031a/engine/ping",
     "pong": "wds-t2-906e031a/device/pong"
   },
+  "security": {
+    "command_key": "6322c6877847f671ea58d68082b199e666da1acc49bcdecaf89ecac797ebb462",
+    "max_command_age_s": 300
+  },
   "dataset_dir": "WDSEventDB-main",
   "db_path": "data/wds.db",
 

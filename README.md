@@ -54,12 +54,15 @@ IotProject/                  # CLOUD laptop
 ├── WDSEventDB-main/         # dataset (for training)
 ├── iot_device/              # source of the device package
 ├── tools/build_device_zip.py# builds wds_iot_device.zip from iot_device/ + config.json
+├── tools/attack_demo.py     # plays an attacker: forged / replayed commands
+├── docs/                    # Project_Report.docx (+ .pdf) and Presentation.pptx
 ├── broker/                  # local MQTT broker, only as a backup without internet
 ├── common/                  # shared Python code
 │   ├── config.py            #   sensor names, classes, zones, scenarios
 │   ├── dataset.py           #   Excel loading (+ CSV cache in data/cache)
 │   ├── features.py          #   feature engineering + leak index / severity / sensor rules
 │   ├── predictor.py         #   one inference API for every model
+│   ├── security.py          #   HMAC signing of control commands
 │   └── db.py                #   SQLite helpers (init / reset)
 ├── db/schema.sql            # SQLite schema
 ├── ml/
@@ -191,6 +194,13 @@ Severity thresholds are the 33rd/66th percentiles of the leak index over all lea
 
 ---
 
+### Advanced features
+* **Signed control commands:** the broker is public, so every command carries an HMAC-SHA256 signature over its id, time, action, target and value (`common/security.py`; dashboard commands are signed in the Node-RED *build command* node). The device rejects unsigned, forged, altered, replayed (already executed) and old (> 5 min) commands, and raises a `FORGED_COMMAND` alert. The shared key is `security.command_key` in `config.json`, copied into the device zip. Demonstrate it with `python tools/attack_demo.py unsigned` (also `wrongkey`, `tampered`, `replay`).
+* **Explainable alerts:** every leak, sensor-fault and cyber-attack alert lists the three signals that changed most from normal, e.g. `p3_in 2.052 -> 0.819 (-57%)`. Leaks and sensor faults are explained with pressure and flow only; cyber-attacks also with pump and valve setpoints. The Performance page shows the Extra Trees feature importance (`ml/results/feature_importance.png`).
+* **Shortcut check:** valve settings change when the leaks begin in these recordings, so Extra Trees was retrained without all 9 pump and valve features: macro F1 0.996 → 0.989, leak recall 0.989. The models detect events from pressure and flow.
+* **Incident report:** *Performance → Download incident report (CSV)*, or http://localhost:1880/report/incidents.csv: every alert and action, oldest first.
+* Also: clock-offset correction, live model switching, scenario injection, Node-RED edge rule, Last Will device status.
+
 ## 7. Performance evaluation
 
 ### Closed-loop KPIs
@@ -245,6 +255,8 @@ Sensor timestamps come from the device's clock, and the laptops' clocks never ma
 | Physical valid ranges | `decision.pressure_valid_range`, `flow_valid_range` (engine + Node-RED edge rule) |
 | Add a new action | `execute_command()` in `iot_device.py` (device) + `start_event()/update_leak()` in the engine (cloud) |
 | Add a model | `sklearn_models()` in `ml/train.py`, retrain, then pick it in the dashboard |
+| Command security key / max age | `security` in `config.json`, then rebuild the zip |
+| Evidence shown with alerts | `evidence()` in `engine/decision_engine.py` |
 | Edge rule in Node-RED | function node *Validate & enrich* (flow tab *Ingest*) |
 | SQL inserts | function nodes *Store …* (they use `global.get('db')`) |
 
@@ -254,4 +266,4 @@ Restart Node-RED after changing `config.json`, because it reads the file at star
 * Recorded data cannot respond to control actions. Their effect is approximated by skipping the rest of the anomalous run (see §6).
 * Leak location is a heuristic (the dataset has no true leak position).
 * Water saved is reported in dataset flow units × seconds.
-* The public HiveMQ broker has no access control or encryption. A private HiveMQ Cloud cluster with TLS and passwords would fix this, but needs an account and changes to the broker settings on both sides.
+* The public HiveMQ broker has no access control or encryption. Commands are signed, but telemetry is readable and could be forged, and the shared key is stored in the project files. A private HiveMQ Cloud cluster with TLS and passwords would fix this, but needs an account and changes to the broker settings on both sides.

@@ -241,5 +241,22 @@
       "model_size_kb": 108.6513671875,
       "latency_ms": 0.7843800000000556
     }
+  },
+  "feature_importance": {
+    "valve2": 0.0969,
+    "min_pressure": 0.0774,
+    "vfd4_2": 0.0744,
+    "f3_mean10": 0.0672,
+    "f3": 0.0614,
+    "vfd3": 0.0514,
+    "f2": 0.0508,
+    "valve_diff": 0.0488,
+    "f2_mean10": 0.0448,
+    "vfd1": 0.0272,
+    "p2_out_mean10": 0.0268,
+    "flow_out_total": 0.0242,
+    "p4_in": 0.0234,
+    "f4": 0.0213,
+    "pump1_per_flow": 0.0199
   }
 }

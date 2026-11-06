@@ -30,7 +30,7 @@ def main():
     cfg = load_config()
     with open(os.path.join(SOURCE, "device_settings.json"), encoding="utf-8") as f:
         settings = json.load(f)
-    device_cfg = {"project_id": cfg["project_id"], "mqtt": cfg["mqtt"],
+    device_cfg = {"project_id": cfg["project_id"], "mqtt": cfg["mqtt"], "security": cfg["security"],
                   "topics": {k: cfg["topics"][k] for k in DEVICE_TOPICS}, "device": settings}
 
     with zipfile.ZipFile(OUT, "w", zipfile.ZIP_DEFLATED) as z:

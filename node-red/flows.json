@@ -1724,7 +1724,7 @@
         "type": "function",
         "z": "tab_control",
         "name": "build command",
-        "func": "// add id/timestamp so the acknowledgement can be matched\nconst c = Object.assign({}, msg.payload);\nc.cmd_id = 'ui-' + Date.now();\nc.ts = Date.now();\nc.source = 'dashboard';\nc.reason = c.reason || 'manual override from dashboard';\nreturn { payload: c };\n",
+        "func": "// add id/timestamp so the acknowledgement can be matched\nconst c = Object.assign({}, msg.payload);\nc.cmd_id = 'ui-' + Date.now();\nc.ts = Date.now();\nc.source = 'dashboard';\nc.reason = c.reason || 'manual override from dashboard';\n// sign it: the IoT device rejects commands without a valid HMAC (see common/security.py)\nconst value = c.value === undefined ? null : c.value;\nconst text = [c.cmd_id, String(c.ts), c.action || '', c.target == null ? '' : String(c.target),\n              JSON.stringify(value)].join('|');\nc.sig = global.get('crypto').createHmac('sha256', global.get('wdsConfig').security.command_key)\n    .update(text).digest('hex');\nreturn { payload: c };\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2540,7 +2540,7 @@
         "order": 1,
         "width": 12,
         "height": 14,
-        "format": "<style>\n.mt{width:100%;border-collapse:collapse;font-size:12px}\n.mt th{text-align:right;color:#9ab;border-bottom:1px solid #666;padding:4px}\n.mt td{text-align:right;border-bottom:1px solid #444;padding:4px}\n.mt td:first-child,.mt th:first-child,.mt td:nth-child(2),.mt th:nth-child(2){text-align:left}\n.mt tr.best td{background:#1b3a4b;font-weight:bold}\n.imgs img{max-width:49%;background:#fff;margin-top:8px}\n</style>\n<div ng-if=\"msg.payload\">\n<div style=\"font-size:12px;color:#9ab\">Trained {{msg.payload.generated}} · train {{msg.payload.n_train}} / test {{msg.payload.n_test}} readings · highlighted = deployed model</div>\n<table class=\"mt\">\n<tr><th>Model</th><th>Family</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1</th><th>False alarm</th>\n<th>Leak recall</th><th>Train [s]</th><th>CPU [%]</th><th>Mem [MB]</th><th>Size [KB]</th><th>Latency [ms]</th></tr>\n<tr ng-repeat=\"r in msg.payload.rows\" ng-class=\"{best:r.best}\">\n<td>{{r.name}}</td><td>{{r.family}}</td><td>{{r.accuracy|number:4}}</td><td>{{r.precision|number:4}}</td>\n<td>{{r.recall|number:4}}</td><td>{{r.f1|number:4}}</td><td>{{r.far|number:4}}</td><td>{{r.recall_cls.LEAK.recall|number:3}}</td>\n<td>{{r.train|number:2}}</td><td>{{r.cpu|number:0}}</td><td>{{r.mem|number:1}}</td><td>{{r.size|number:0}}</td><td>{{r.latency|number:2}}</td></tr>\n</table>\n<div style=\"font-size:12px;margin-top:8px\">Leak severity thresholds (leak index): minor &lt; {{msg.payload.thresholds.moderate|number:3}} ≤ moderate &lt; {{msg.payload.thresholds.severe|number:3}} ≤ severe.\n <span ng-repeat=\"(k,v) in msg.payload.leaks\"> {{k}}: index {{v.mean_leak_index|number:2}}, zone {{v.suspected_zone}};</span></div>\n<div class=\"imgs\"><img ng-src=\"/results/model_comparison.png?t={{msg.payload.t}}\"><img ng-src=\"/results/confusion_matrices.png?t={{msg.payload.t}}\"></div>\n</div>",
+        "format": "<style>\n.mt{width:100%;border-collapse:collapse;font-size:12px}\n.mt th{text-align:right;color:#9ab;border-bottom:1px solid #666;padding:4px}\n.mt td{text-align:right;border-bottom:1px solid #444;padding:4px}\n.mt td:first-child,.mt th:first-child,.mt td:nth-child(2),.mt th:nth-child(2){text-align:left}\n.mt tr.best td{background:#1b3a4b;font-weight:bold}\n.imgs img{max-width:49%;background:#fff;margin-top:8px}\n</style>\n<div ng-if=\"msg.payload\">\n<div style=\"font-size:12px;color:#9ab\">Trained {{msg.payload.generated}} · train {{msg.payload.n_train}} / test {{msg.payload.n_test}} readings · highlighted = deployed model</div>\n<table class=\"mt\">\n<tr><th>Model</th><th>Family</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1</th><th>False alarm</th>\n<th>Leak recall</th><th>Train [s]</th><th>CPU [%]</th><th>Mem [MB]</th><th>Size [KB]</th><th>Latency [ms]</th></tr>\n<tr ng-repeat=\"r in msg.payload.rows\" ng-class=\"{best:r.best}\">\n<td>{{r.name}}</td><td>{{r.family}}</td><td>{{r.accuracy|number:4}}</td><td>{{r.precision|number:4}}</td>\n<td>{{r.recall|number:4}}</td><td>{{r.f1|number:4}}</td><td>{{r.far|number:4}}</td><td>{{r.recall_cls.LEAK.recall|number:3}}</td>\n<td>{{r.train|number:2}}</td><td>{{r.cpu|number:0}}</td><td>{{r.mem|number:1}}</td><td>{{r.size|number:0}}</td><td>{{r.latency|number:2}}</td></tr>\n</table>\n<div style=\"font-size:12px;margin-top:8px\">Leak severity thresholds (leak index): minor &lt; {{msg.payload.thresholds.moderate|number:3}} ≤ moderate &lt; {{msg.payload.thresholds.severe|number:3}} ≤ severe.\n <span ng-repeat=\"(k,v) in msg.payload.leaks\"> {{k}}: index {{v.mean_leak_index|number:2}}, zone {{v.suspected_zone}};</span></div>\n<div class=\"imgs\"><img ng-src=\"/results/model_comparison.png?t={{msg.payload.t}}\"><img ng-src=\"/results/confusion_matrices.png?t={{msg.payload.t}}\"></div>\n<div style=\"font-size:12px;margin-top:8px;color:#9ab\">Explainability: which features the Extra Trees model relies on most</div>\n<div class=\"imgs\"><img ng-src=\"/results/feature_importance.png?t={{msg.payload.t}}\"></div>\n</div>",
         "storeOutMessages": true,
         "fwdInMessages": false,
         "resendOnRefresh": true,
@@ -2763,6 +2763,85 @@
             [
                 "f0104"
             ]
+        ]
+    },
+    {
+        "id": "wds718173d9d0cb",
+        "type": "comment",
+        "z": "tab_perf",
+        "name": "Incident report download: GET /report/incidents.csv",
+        "info": "",
+        "x": 240,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "wds7fe5a6ff55b8",
+        "type": "http in",
+        "z": "tab_perf",
+        "name": "GET /report/incidents.csv",
+        "url": "/report/incidents.csv",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 190,
+        "y": 560,
+        "wires": [
+            [
+                "wds3301c26a3c64"
+            ]
+        ]
+    },
+    {
+        "id": "wds3301c26a3c64",
+        "type": "function",
+        "z": "tab_perf",
+        "name": "Build CSV from SQLite",
+        "func": "// Incident report: every alert and control action, oldest first, as CSV\nconst db = global.get('db');\nconst rows = db.prepare(`\n    SELECT ts, 'alert' AS kind, source, level AS level_or_ack, type AS what, message AS details,\n           NULL AS response_ms\n      FROM alerts\n    UNION ALL\n    SELECT ts, 'action', source, CASE WHEN ack_ts IS NULL THEN 'no ack' ELSE 'acknowledged' END,\n           action, TRIM(COALESCE(target, '') || ' ' || COALESCE(value, '') || ' ' ||\n           COALESCE(reason, '') || ' ' || COALESCE(effect, '')), response_ms\n      FROM actions\n     ORDER BY ts`).all();\nconst esc = v => v === null || v === undefined ? '' : '\"' + String(v).replace(/\"/g, '\"\"') + '\"';\nconst lines = ['time,kind,source,level_or_ack,what,details,response_ms'];\nfor (const r of rows) {\n    lines.push([new Date(r.ts).toISOString(), r.kind, r.source, r.level_or_ack, r.what, r.details,\n                r.response_ms].map(esc).join(','));\n}\nmsg.payload = lines.join('\\r\\n');\nmsg.headers = { 'Content-Type': 'text/csv; charset=utf-8',\n                'Content-Disposition': `attachment; filename=\"incident_report_${new Date().toISOString().slice(0, 10)}.csv\"` };\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 560,
+        "wires": [
+            [
+                "wds22e914d6e748"
+            ]
+        ]
+    },
+    {
+        "id": "wds22e914d6e748",
+        "type": "http response",
+        "z": "tab_perf",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 620,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "wds4d6fdb0cc0bf",
+        "type": "ui_template",
+        "z": "tab_perf",
+        "group": "ui_grp_dbstats",
+        "name": "Download incident report",
+        "order": 2,
+        "width": 6,
+        "height": 1,
+        "format": "<a href=\"/report/incidents.csv\" target=\"_blank\" style=\"display:block;text-align:center;padding:8px;background:#1f8fb4;color:#fff;border-radius:3px;text-decoration:none;font-weight:bold\">DOWNLOAD INCIDENT REPORT (CSV)</a>",
+        "storeOutMessages": false,
+        "fwdInMessages": false,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 660,
+        "y": 600,
+        "wires": [
+            []
         ]
     }
 ]

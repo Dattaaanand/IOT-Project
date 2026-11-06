@@ -118,7 +118,8 @@ IotProject/                ← CLOUD laptop
 ├── explanation.md         ← this file
 ├── WDSEventDB-main/       ← dataset
 ├── iot_device/            ← source of the device package
-├── tools/                 ← builds the zip from iot_device/ and config.json
+├── tools/                 ← builds the zip; attack_demo.py for the security demo
+├── docs/                  ← Project_Report.docx/.pdf and Presentation.pptx
 ├── broker/                ← local backup broker (no internet)
 ├── node-red/              ← Node-RED: settings.js (DB connection), flows.json (all flows + dashboard)
 ├── db/schema.sql          ← database tables
@@ -343,6 +344,21 @@ change model, auto mode, minimum confidence, votes required, reset KPIs. The eng
 
 ---
 
+### 10.6 Advanced features added for extra marks
+
+**Signed control commands (security).** The broker is public, so anyone who learnt our topic names could send "close valve". Every command now carries a signature: HMAC-SHA256 over `cmd_id|ts|action|target|value`, made with a secret key that only the two laptops have (`security.command_key` in `config.json`, also inside the device zip). The device recomputes it and refuses the command if:
+- there is no signature, or it doesn't match (forged or altered);
+- the same `cmd_id` was already executed (replay attack);
+- the command is more than 5 minutes old (replay attack).
+
+A refused command prints `[SECURITY] REJECTED …` on the device and raises a `FORGED_COMMAND` alert on the dashboard. Demo: `python tools/attack_demo.py unsigned` (or `wrongkey`, `tampered`, `replay`).
+
+**Explainable alerts.** Each alert says *why*: the 3 signals that changed most from normal, e.g. `p3_in 2.052 -> 0.819 (-57%), p2_out 1.729 -> 0.823 (-50%)`. Leak and sensor-fault evidence uses pressure and flow only; cyber-attack evidence also uses pump and valve setpoints, because changing them *is* the attack. The Performance page shows which features Extra Trees relies on most.
+
+**Shortcut check.** The feature-importance chart showed pump and valve settings ranking high, and in the leak recordings the analog valves open further when the leak starts (valve 1: 49 % → 72 % in LeakEvent1). So the model might have learnt "valve changed" instead of "leak". We retrained Extra Trees **without all 9 pump and valve features**: macro F1 went only from **0.996 to 0.989**, and leak recall stayed at 0.989. So the models really detect events from pressure and flow.
+
+**Incident report.** The Performance page has a *Download incident report (CSV)* button (served by Node-RED at `/report/incidents.csv`): every alert and action in time order, including rejected attack attempts.
+
 ## 11. Performance evaluation (the 3 boxes in the diagram)
 
 | Diagram box | What we measure | Where |
@@ -450,6 +466,7 @@ Check that the Control Panel says **IoT node: ONLINE**, and that the device wind
 6. **Switch the model** to `knn` or `cnn_lstm` in the dropdown and inject a leak: "We kept the best model from each family and can compare them live. Extra Trees is the default because it has the best macro F1."
 7. **Performance page**: live KPIs and the offline comparison table.
 8. Optionally open the Node-RED editor and the SQLite DB to show the stored rows.
+9. **Security:** run `python tools/attack_demo.py unsigned` on your laptop. The device window shows `[SECURITY] REJECTED` and the dashboard raises a FORGED_COMMAND alert: "On a public broker anyone could send commands, so ours are signed."
 
 ---
 
@@ -466,6 +483,8 @@ Check that the Control Panel says **IoT node: ONLINE**, and that the device wind
 | "Add a new dashboard widget" | drag a `ui_gauge` / `ui_text` into flow *3 Dashboard*, wire it from *Split to widgets*, Deploy |
 | "Add a new actuator command" | `execute_command()` in `iot_device.py` on the device laptop + a button in the Control Panel flow |
 | "Use another ML model" | Control Panel dropdown, or `python -m engine.decision_engine --model knn` |
+| "Show the security" | `python tools/attack_demo.py unsigned` (or `wrongkey`, `tampered`, `replay`) |
+| "Change the evidence in alerts" | `evidence()` in `engine/decision_engine.py` |
 | "Add a new model" | add it to `sklearn_models()` in `ml/train.py`, run `python -m ml.train` (it then appears in the dropdown) |
 | "Faster replay" | Control Panel speed slider, or `python iot_device.py --rate 10` on the device laptop |
 | "Show stored data" | open `data/wds.db` with DB Browser for SQLite, or run `python -c "from common import db; print(db.connect().execute('select count(*) from telemetry').fetchone()[0])"` |
@@ -475,6 +494,18 @@ After changing `config.json`, restart the affected program (the engine, and Node
 ---
 
 ## 18. Likely viva questions with short answers
+
+**Why sign the commands? Isn't MQTT secure?**
+Plain MQTT on a public broker has no authentication: anyone can publish to any topic. A signature proves the command came from someone who has the key and wasn't changed on the way. The device also remembers executed command ids and rejects old commands, which stops replay attacks.
+
+**What is HMAC?**
+A keyed hash (RFC 2104): HMAC-SHA256(key, message). Without the key you can't produce the right value, and changing one character of the message changes it completely.
+
+**What's still not secure?**
+Telemetry isn't signed or encrypted, so it can be read and could be forged, and the key is stored in the project files. A real system would use a private broker with TLS and per-device passwords.
+
+**How do you know the model isn't just recognising the recordings?**
+We checked: without any pump or valve feature, macro F1 only drops from 0.996 to 0.989, so the models use pressure and flow.
 
 **Why two laptops?**
 It separates the field device from the cloud, like a real deployment. The device only senses and acts; the heavy work (database, ML, decisions) runs in the cloud.
@@ -542,6 +573,9 @@ Node-RED still stores data, the dashboard still shows live values, and the Node-
 - hybrid ML + physics rule
 - 3 models, the best of 9 candidates across 3 families, with full ML/computational comparison
 - real two-laptop deployment over an online broker, with automatic clock-offset correction
+- HMAC-signed commands with replay protection (forged commands rejected)
+- explainable alerts, feature importance and a shortcut-learning check
+- downloadable incident report (CSV)
 - hysteresis / voting for stability
 - automatic closed-loop control with acknowledgements and measured latency
 - live model switching, auto/manual (human-in-the-loop) mode

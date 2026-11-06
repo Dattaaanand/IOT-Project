@@ -33,6 +33,7 @@ from common.config import (CLASS_NAMES, CYBER_ATTACK, LEAK, NORMAL, PRESSURES, F
                            ZONES, abspath, load_config)
 from common.features import invalid_sensors, leak_index, severity_from_index, zone_leak_scores
 from common.predictor import Predictor, load_meta
+from common.security import sign
 from engine.kpi import KPITracker
 
 SEVERITY_RANK = {"minor": 0, "moderate": 1, "severe": 2}
@@ -178,6 +179,7 @@ class DecisionEngine:
         if self.event is not None:
             self.event["actions"].append(action)
         self.kpi.on_command(action, int(row["gt_class"]) if row is not None else NORMAL)
+        cmd["sig"] = sign(cmd, self.cfg["security"]["command_key"])
         print(f"[engine] CMD {action} {target or ''} {'' if value is None else value}  ({reason})")
         self.publish(self.topics["command"], cmd)
 
@@ -185,6 +187,19 @@ class DecisionEngine:
     def baseline(self):
         rows = self.baseline_rows if len(self.baseline_rows) >= 10 else list(self.window)[:20]
         return pd.DataFrame(list(rows))[SENSORS].median()
+
+    def evidence(self, signals=PRESSURES + FLOWS, n=3):
+        """Explain an alert: the signals that moved most from normal operation.
+        Leaks and sensor faults are explained by the physical measurements; a cyber-attack
+        also by the pump and valve setpoints, because manipulating them is the attack."""
+        base = self.baseline()
+        recent = pd.DataFrame(list(self.window)[-5:])[SENSORS].mean()
+        rel = {c: (recent[c] - base[c]) / (abs(base[c]) + 0.1) for c in signals}
+        top = sorted(rel, key=lambda c: abs(rel[c]), reverse=True)[:n]
+        items = [{"signal": c, "normal": round(float(base[c]), 3), "now": round(float(recent[c]), 3),
+                  "change_pct": round(100 * float(rel[c]), 1)} for c in top]
+        text = ", ".join(f"{i['signal']} {i['normal']:g} -> {i['now']:g} ({i['change_pct']:+.0f}%)" for i in items)
+        return items, text
 
     def faulty_sensor(self, row, invalid):
         if invalid:
@@ -228,13 +243,16 @@ class DecisionEngine:
         elif cls == SENSOR_FAULT:
             sensor = self.faulty_sensor(row, invalid)
             self.event["sensor"] = sensor
+            items, why = self.evidence()
             self.alert("WARNING", name, f"Sensor fault detected on {sensor} (reading {row[sensor]:.3f}). "
-                                        f"Sensor flagged; readings not trusted for control.",
-                       force=True, sensor=sensor)
+                                        f"Sensor flagged; readings not trusted for control. Evidence: {why}",
+                       force=True, sensor=sensor, evidence=items)
             self.command("flag_sensor", sensor, reason="sensor fault", row=row)
         elif cls == CYBER_ATTACK:
+            items, why = self.evidence(SENSORS)
             self.alert("CRITICAL", name, "Abnormal actuator/sensor pattern consistent with a cyber-attack "
-                                         "(valve/pump manipulation). Switching to SAFE mode.", force=True)
+                                         f"(valve/pump manipulation). Switching to SAFE mode. Evidence: {why}",
+                       force=True, evidence=items)
             self.command("safe_mode", value=True, reason="cyber-attack suspected", row=row)
 
     def update_leak(self, row, initial=False):
@@ -253,9 +271,10 @@ class DecisionEngine:
         escalated = not initial
         ev["severity"], ev["zone"] = sev, ev["zone"] or zone
         level = "WARNING" if sev == "minor" else "CRITICAL"
+        items, why = self.evidence()
         self.alert(level, "LEAK", f"{'Leak escalated to' if escalated else 'Leak detected:'} {sev.upper()} "
-                                  f"(leak index {idx:.2f}), suspected zone {ev['zone']}",
-                   force=True, severity=sev, zone=ev["zone"])
+                                  f"(leak index {idx:.2f}), suspected zone {ev['zone']}. Evidence: {why}",
+                   force=True, severity=sev, zone=ev["zone"], evidence=items)
         self.command("set_pump", "pump1", self.d["pump_reduction"][sev],
                      reason=f"{sev} leak - reduce pressure", row=row)
         if SEVERITY_RANK[sev] >= SEVERITY_RANK[self.d["isolate_from_severity"]] and "isolate_zone" not in ev["actions"]:
