@@ -458,6 +458,9 @@ powershell -ExecutionPolicy Bypass -File start_all.ps1
 Check that the Control Panel says **IoT node: ONLINE**, and that the device window says "cloud is responding".
 
 ### Suggested 5-minute demo script
+
+Tip: click **Random events ON** in the Control Panel first. The device then plays a random leak, sensor fault or cyber-attack about every 30 s, each with 10-20 s of normal readings before it, so alerts keep appearing on their own while you talk. **Random events OFF** returns to the fixed playlist.
+
 1. **Show both laptops**: "This laptop is the IoT device and that one is the cloud. They only communicate through the online HiveMQ broker." Then **Live Monitoring**: "Readings arrive over MQTT, Node-RED validates and stores them in SQLite, and the charts update live."
 2. **Control Panel → Leak 1 (large)**, then switch to **Analytics**: the state turns red (LEAK, MODERATE → SEVERE, zone C), alerts pop up, the Zone C valve closes, the action log shows ~300 ms acks; after the leak is contained it returns to NORMAL and `restore` is sent. **Point at the device laptop**: the same alerts, commands and valve changes appear in its window.
 3. **Sensor fault P2**: orange SENSOR FAULT on `p2_out`, sensor flagged, *no* valve closed: "We avoid unnecessary switching for a sensor problem."

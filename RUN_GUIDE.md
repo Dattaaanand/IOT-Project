@@ -78,6 +78,13 @@ If you see all this, the project is working.
 
 ## Part 3: Demo
 
+### For a 5-minute demo: Random events
+Click **Random events ON** in **Control Panel → Scenario Injection** (or start the device with `python iot_device.py --random`). The device then plays one random event after another, about 10 in 5 minutes:
+- each event has 10-20 s of normal readings before it, taken from the same recording, and a few seconds after it;
+- leaks, sensor faults and cyber-attacks take turns randomly, never the same type twice in a row.
+
+Click **Random events OFF** to go back to the normal playlist. The scenario buttons still work in random mode.
+
 Use the buttons in **Control Panel → Scenario Injection**, then switch to **Analytics & Alerts** to watch. Most scenarios start with normal readings, so the event appears after a short wait. Keep your friend's window visible, because the same events appear there too.
 
 | Button | Wait | Your dashboard shows | Friend's window shows |

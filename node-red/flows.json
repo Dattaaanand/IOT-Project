@@ -2318,7 +2318,7 @@
         "label": "Replay speed (readings/s)",
         "tooltip": "",
         "group": "ui_grp_scenario",
-        "order": 11,
+        "order": 13,
         "width": 6,
         "height": 1,
         "passthru": false,
@@ -2346,7 +2346,7 @@
         "order": 0,
         "width": 6,
         "height": 2,
-        "format": "<div ng-if=\"msg.payload\" style=\"font-size:13px\">\n IoT node: <b ng-style=\"{color: msg.payload.online ? '#4caf50' : '#ff5252'}\">{{msg.payload.online ? 'ONLINE' : 'OFFLINE'}}</b>\n <div ng-if=\"msg.payload.online\">Playing <b>{{msg.payload.scenario}}</b> row {{msg.payload.row}} / {{msg.payload.end}} at {{msg.payload.rate_hz}} Hz\n <span ng-if=\"msg.payload.paused\" style=\"color:#ffb300\">(paused)</span></div>\n <div ng-if=\"!msg.payload.online\">Start the IoT device on the other laptop.</div>\n</div>",
+        "format": "<div ng-if=\"msg.payload\" style=\"font-size:13px\">\n IoT node: <b ng-style=\"{color: msg.payload.online ? '#4caf50' : '#ff5252'}\">{{msg.payload.online ? 'ONLINE' : 'OFFLINE'}}</b>\n <div ng-if=\"msg.payload.online\">Playing <b>{{msg.payload.scenario}}</b> row {{msg.payload.row}} / {{msg.payload.end}} at {{msg.payload.rate_hz}} Hz\n <span ng-if=\"msg.payload.paused\" style=\"color:#ffb300\">(paused)</span>\n <div ng-if=\"msg.payload.random_mode\" style=\"color:#13A89E;font-weight:bold\">Random events: ON</div></div>\n <div ng-if=\"!msg.payload.online\">Start the IoT device on the other laptop.</div>\n</div>",
         "storeOutMessages": true,
         "fwdInMessages": false,
         "resendOnRefresh": true,
@@ -2842,6 +2842,62 @@
         "y": 600,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "wds8f7fb6d8d6b9",
+        "type": "ui_button",
+        "z": "tab_control",
+        "name": "Random events ON",
+        "group": "ui_grp_scenario",
+        "order": 11,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "Random events ON",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "#13A89E",
+        "className": "",
+        "icon": "",
+        "payload": "{\"action\": \"random\", \"value\": true}",
+        "payloadType": "json",
+        "topic": "",
+        "topicType": "str",
+        "x": 410,
+        "y": 1320,
+        "wires": [
+            [
+                "mo0072"
+            ]
+        ]
+    },
+    {
+        "id": "wds7fba0d95bd11",
+        "type": "ui_button",
+        "z": "tab_control",
+        "name": "Random events OFF",
+        "group": "ui_grp_scenario",
+        "order": 12,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "Random events OFF",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "{\"action\": \"random\", \"value\": false}",
+        "payloadType": "json",
+        "topic": "",
+        "topicType": "str",
+        "x": 410,
+        "y": 1360,
+        "wires": [
+            [
+                "mo0072"
+            ]
         ]
     }
 ]

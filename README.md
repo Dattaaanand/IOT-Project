@@ -116,7 +116,7 @@ Either laptop can start first. Both connect to `broker.hivemq.com:1883`.
 
 * Dashboard (cloud laptop): http://localhost:1880/ui
 * Node-RED editor: http://localhost:1880
-* Useful options: `python -m engine.decision_engine --model cnn_lstm --no-auto`, `python iot_device.py --scenario leak1 --rate 10`, `python -m common.db --reset`
+* Useful options: `python -m engine.decision_engine --model cnn_lstm --no-auto`, `python iot_device.py --scenario leak1 --rate 10`, `python iot_device.py --random` (random events for a short demo; also a dashboard button), `python -m common.db --reset`
 * After changing the broker or topics in `config.json`, rebuild the zip with `python tools/build_device_zip.py` and give it to the device laptop again.
 
 The device plays the playlist in its `device_config.json` (clean → leak1 → clean → sensor fault → leak2 → cyber-attack → leak3 → sensor fault) and loops. Each recording row is one reading.

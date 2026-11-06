@@ -3,6 +3,7 @@
     python iot_device.py                     # play the playlist in device_config.json
     python iot_device.py --scenario leak1    # loop one recording
     python iot_device.py --rate 10           # readings per second
+    python iot_device.py --random            # random events, each with normal readings around it
 
 Sensors  : replays the real WDSEventDB recordings row by row and publishes each
            reading as JSON to the online MQTT broker.
@@ -22,6 +23,7 @@ import hashlib
 import hmac
 import json
 import os
+import random
 import sys
 import threading
 import time
@@ -39,6 +41,7 @@ NORMAL, LEAK, SENSOR_FAULT, CYBER_ATTACK = range(4)
 SENSORS = ["p1_out", "p2_out", "p3_in", "p4_in", "f1", "f2", "f3", "f4",
            "vfd1", "vfd2", "vfd3", "vfd4_1", "vfd4_2", "valve1", "valve2"]
 ZONE_VALVES = {"A": "iso_A", "B": "iso_B", "C": "iso_C", "D": "iso_D"}
+EVENT_RECORDINGS = ["leak1", "leak2", "leak3", "sensor1", "sensor23", "sensor45", "sensor67", "cyber"]
 
 
 def now_ms():
@@ -58,7 +61,7 @@ def load_recording(name):
 
 
 class IoTDevice:
-    def __init__(self, cfg, playlist, rate_hz):
+    def __init__(self, cfg, playlist, rate_hz, random_mode=False):
         self.cfg = cfg
         self.topics = cfg["topics"]
         self.rate_hz = rate_hz
@@ -69,6 +72,9 @@ class IoTDevice:
 
         # playback position
         self.pl_index = -1
+        self.random_mode = random_mode
+        self._clips = None
+        self.last_clip = None
         self.segment = 0
         self.rows = None
         self.row = 0
@@ -124,8 +130,43 @@ class IoTDevice:
         self.publish_status()
 
     def next_item(self):
+        if self.random_mode:
+            self.start_item(self.random_item())
+            return
         self.pl_index = (self.pl_index + 1) % len(self.playlist)
         self.start_item(self.playlist[self.pl_index])
+
+    def event_clips(self):
+        """Every anomalous run in the event recordings: (recording, first row, end row)."""
+        if self._clips is None:
+            self._clips = []
+            for name in EVENT_RECORDINGS:
+                rows, i = self.get(name), 0
+                while i < len(rows):
+                    if int(rows[i]["gt_class"]) != NORMAL:
+                        j = i
+                        while j < len(rows) and int(rows[j]["gt_class"]) != NORMAL:
+                            j += 1
+                        self._clips.append((name, i, j))
+                        i = j
+                    else:
+                        i += 1
+        return self._clips
+
+    def random_item(self):
+        """Random mode for a short demo: one random event from an event recording, with a
+        random 10-20 s of that recording's own normal readings before it and a few seconds
+        of normal readings after it. The next clip is a different event."""
+        lo, hi = self.cfg["device"].get("random_lead_s", [10, 20])
+        lead = int(random.uniform(lo, hi) * self.rate_hz)
+        clips = [c for c in self.event_clips() if c[1] >= lead] or self.event_clips()  # need a normal lead-in
+        kind = lambda c: int(self.get(c[0])[c[1]]["gt_class"])
+        # pick the event type first (leak / sensor fault / cyber-attack), never the same type twice in a row
+        kinds = sorted({kind(c) for c in clips} - ({kind(self.last_clip)} if self.last_clip else set()))
+        chosen = random.choice(kinds) if kinds else kind(self.last_clip)
+        name, onset, end = self.last_clip = random.choice([c for c in clips if kind(c) == chosen])
+        return {"scenario": name, "start": onset - lead if onset >= lead else 0,
+                "end": min(len(self.get(name)), end + int(8 * self.rate_hz))}
 
     def current_class(self):
         return int(self.rows[self.row]["gt_class"]) if self.row < self.end else NORMAL
@@ -272,6 +313,7 @@ class IoTDevice:
             return
         msg = {"device_id": DEVICE_ID, "online": True, "scenario": self.scenario, "segment": self.segment,
                "row": self.row, "end": self.end, "rate_hz": self.rate_hz, "paused": self.paused,
+               "random_mode": self.random_mode,
                "ts": now_ms()}
         self.client.publish(self.topics["sim_status"], json.dumps(msg), qos=1, retain=True)
 
@@ -290,6 +332,10 @@ class IoTDevice:
             elif action == "resume":
                 self.paused = False
                 self.say("[DATA]    resumed by the cloud")
+            elif action == "random":
+                self.random_mode = c.get("value") in (True, 1, "on", "ON")
+                self.say(f"[DATA]    random events {'ON' if self.random_mode else 'OFF (back to the playlist)'}")
+                self.next_item()
             elif action == "next":
                 self.next_item()
         self.publish_status()
@@ -366,10 +412,11 @@ def main():
     ap.add_argument("--port", type=int, default=cfg["mqtt"]["port"])
     ap.add_argument("--rate", type=float, default=cfg["device"]["rate_hz"], help="readings per second")
     ap.add_argument("--scenario", help="loop a single recording instead of the playlist")
+    ap.add_argument("--random", action="store_true", help="random events with normal data in between")
     args = ap.parse_args()
     cfg["mqtt"].update(host=args.host, port=args.port)
     playlist = [{"scenario": args.scenario}] if args.scenario else cfg["device"]["playlist"]
-    IoTDevice(cfg, playlist, args.rate).run()
+    IoTDevice(cfg, playlist, args.rate, random_mode=args.random).run()
 
 
 if __name__ == "__main__":
